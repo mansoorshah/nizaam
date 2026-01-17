@@ -45,7 +45,18 @@ class ProjectController extends Controller
 
     public function create()
     {
-        $employees = $this->employeeModel->getAllWithUsers(['status' => 'active']);
+        if (!$this->isAdmin()) {
+            http_response_code(403);
+            echo "403 - Access Denied";
+            return;
+        }
+
+        $employees = $this->employeeModel->getAllWithUsers(['employment_status' => 'active']);
+        
+        if (empty($employees)) {
+            $employees = $this->employeeModel->getAll();
+        }
+        
         $this->view('projects.create', ['employees' => $employees]);
     }
 

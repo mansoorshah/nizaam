@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="auto">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,10 +20,16 @@
             --sidebar-width: 260px;
         }
 
+        [data-bs-theme="dark"] {
+            --nizaam-light: #1e293b;
+            --nizaam-dark: #f1f5f9;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background-color: var(--nizaam-light);
             color: var(--nizaam-dark);
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .sidebar {
@@ -110,12 +116,13 @@
         }
 
         .topbar {
-            background: white;
+            background: var(--bs-body-bg);
             padding: 1rem 2rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid var(--bs-border-color);
         }
 
         .topbar-title {
@@ -146,15 +153,16 @@
         }
 
         .card {
-            border: none;
+            border: 1px solid var(--bs-border-color);
             border-radius: 0.75rem;
+            background-color: var(--bs-body-bg);
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             margin-bottom: 1.5rem;
         }
 
         .card-header {
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
+            background: var(--bs-body-bg);
+            border-bottom: 1px solid var(--bs-border-color);
             padding: 1.25rem 1.5rem;
             font-weight: 600;
         }
@@ -294,7 +302,12 @@
         <div class="topbar">
             <div class="topbar-title"><?= $title ?? 'Dashboard' ?></div>
             <div class="topbar-actions">
-                <a href="<?= $this->getBaseUrl() ?>/notifications" class="btn btn-link text-dark notification-badge">
+                <button class="btn btn-link text-body" id="themeToggle" title="Toggle theme">
+                    <i class="bi bi-sun-fill fs-5" id="theme-icon-light"></i>
+                    <i class="bi bi-moon-stars-fill fs-5 d-none" id="theme-icon-dark"></i>
+                    <i class="bi bi-circle-half fs-5 d-none" id="theme-icon-auto"></i>
+                </button>
+                <a href="<?= $this->getBaseUrl() ?>/notifications" class="btn btn-link text-body notification-badge">
                     <i class="bi bi-bell fs-5"></i>
                     <?php if (isset($unreadCount) && $unreadCount > 0): ?>
                     <span class="badge bg-danger"><?= $unreadCount ?></span>
@@ -302,7 +315,7 @@
                 </a>
                 
                 <div class="dropdown">
-                    <button class="btn btn-link text-dark dropdown-toggle user-profile" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-link text-body dropdown-toggle user-profile" type="button" data-bs-toggle="dropdown">
                         <div class="user-avatar">
                             <?php $empName = Session::get('employee')['full_name'] ?? 'User'; ?>
                             <?= strtoupper(substr($empName, 0, 1)) ?>
@@ -356,5 +369,74 @@
     <?php endif; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Dark mode implementation with OS default support
+        const getStoredTheme = () => localStorage.getItem('theme');
+        const setStoredTheme = theme => localStorage.setItem('theme', theme);
+        const getPreferredTheme = () => {
+            const storedTheme = getStoredTheme();
+            if (storedTheme) {
+                return storedTheme;
+            }
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        };
+
+        const setTheme = theme => {
+            if (theme === 'auto') {
+                document.documentElement.setAttribute('data-bs-theme', 
+                    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', theme);
+            }
+            updateThemeIcon(theme);
+        };
+
+        const updateThemeIcon = theme => {
+            const lightIcon = document.getElementById('theme-icon-light');
+            const darkIcon = document.getElementById('theme-icon-dark');
+            const autoIcon = document.getElementById('theme-icon-auto');
+            
+            lightIcon.classList.add('d-none');
+            darkIcon.classList.add('d-none');
+            autoIcon.classList.add('d-none');
+            
+            if (theme === 'light') {
+                lightIcon.classList.remove('d-none');
+            } else if (theme === 'dark') {
+                darkIcon.classList.remove('d-none');
+            } else {
+                autoIcon.classList.remove('d-none');
+            }
+        };
+
+        // Set theme on page load
+        const currentTheme = getStoredTheme() || 'auto';
+        setTheme(currentTheme);
+
+        // Listen for OS theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            const storedTheme = getStoredTheme();
+            if (storedTheme !== 'light' && storedTheme !== 'dark') {
+                setTheme(getPreferredTheme());
+            }
+        });
+
+        // Theme toggle button
+        document.getElementById('themeToggle')?.addEventListener('click', () => {
+            const currentTheme = getStoredTheme() || 'auto';
+            let newTheme;
+            
+            if (currentTheme === 'auto') {
+                newTheme = 'light';
+            } else if (currentTheme === 'light') {
+                newTheme = 'dark';
+            } else {
+                newTheme = 'auto';
+            }
+            
+            setStoredTheme(newTheme);
+            setTheme(newTheme);
+        });
+    </script>
 </body>
 </html>

@@ -33,8 +33,8 @@ $router->post('/work-items/{id}/comment', [WorkItemController::class, 'addCommen
 
 // Project routes
 $router->get('/projects', [ProjectController::class, 'index'], [AuthMiddleware::class]);
-$router->get('/projects/create', [ProjectController::class, 'create'], [AuthMiddleware::class]);
-$router->post('/projects/create', [ProjectController::class, 'store'], [AuthMiddleware::class]);
+$router->get('/projects/create', [ProjectController::class, 'create'], [AdminMiddleware::class]);
+$router->post('/projects/store', [ProjectController::class, 'store'], [AdminMiddleware::class]);
 $router->get('/projects/{id}', [ProjectController::class, 'show'], [AuthMiddleware::class]);
 $router->post('/projects/{id}/members', [ProjectController::class, 'addMember'], [AuthMiddleware::class]);
 
