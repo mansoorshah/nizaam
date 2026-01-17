@@ -68,7 +68,12 @@ class AuthController extends Controller
     {
         $user = Session::get('user');
         if ($user) {
-            $this->auditLog->log($user['id'], 'logout', 'user', $user['id']);
+            try {
+                $this->auditLog->log($user['id'], 'logout', 'user', $user['id']);
+            } catch (Exception $e) {
+                // Silently fail if audit log fails (e.g., user doesn't exist)
+                // User logout should still succeed
+            }
         }
 
         Session::destroy();

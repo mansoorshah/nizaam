@@ -2,7 +2,7 @@
 
 return [
     'name' => 'Nizaam',
-    'url' => 'http://localhost/nizaam',
+    'url' => 'http://localhost:8080/nizaam',
     'timezone' => 'UTC',
     'session_lifetime' => 120, // minutes
     'upload_max_size' => 5242880, // 5MB in bytes

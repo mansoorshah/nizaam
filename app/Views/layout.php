@@ -304,14 +304,17 @@
                 <div class="dropdown">
                     <button class="btn btn-link text-dark dropdown-toggle user-profile" type="button" data-bs-toggle="dropdown">
                         <div class="user-avatar">
-                            <?= strtoupper(substr(Session::get('employee')['full_name'] ?? 'U', 0, 1)) ?>
+                            <?php $empName = Session::get('employee')['full_name'] ?? 'User'; ?>
+                            <?= strtoupper(substr($empName, 0, 1)) ?>
                         </div>
-                        <span><?= Session::get('employee')['full_name'] ?? 'User' ?></span>
+                        <span><?= htmlspecialchars($empName) ?></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
+                        <?php if (Session::get('employee')): ?>
                         <li><a class="dropdown-item" href="<?= $this->getBaseUrl() ?>/employees/<?= Session::get('employee')['id'] ?>">
                             <i class="bi bi-person"></i> My Profile
                         </a></li>
+                        <?php endif; ?>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="<?= $this->getBaseUrl() ?>/logout">
                             <i class="bi bi-box-arrow-right"></i> Logout

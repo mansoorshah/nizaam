@@ -18,6 +18,12 @@ class DashboardController extends Controller
     {
         $employee = $this->getCurrentEmployee();
         
+        // Handle case where employee profile doesn't exist yet
+        if (!$employee) {
+            $this->view('dashboard.no_employee');
+            return;
+        }
+        
         // Get work items assigned to current user
         $myWorkItems = $this->workItemModel->getAll(['assigned_to' => $employee['id']]);
         
