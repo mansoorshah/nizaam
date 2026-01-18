@@ -34,22 +34,24 @@
     <div class="col-lg-8">
         <!-- Project Details Card -->
         <div class="card shadow-sm mb-4" data-aos="fade-up">
-            <div class="card-header bg-white border-bottom position-relative">
-                <h6 class="mb-0 text-dark fw-semibold">
-                    <i class="bi bi-info-circle text-primary me-2"></i>
-                    Project Information
-                </h6>
-                <?php if ($this->isAdmin()): ?>
-                <a href="<?= $this->getBaseUrl() ?>/projects/<?= $project['id'] ?>/edit" class="btn btn-sm btn-primary position-absolute top-50 end-0 translate-middle-y me-3">
-                    <i class="bi bi-pencil"></i> Edit
-                </a>
-                <?php endif; ?>
+            <div class="card-header bg-white border-bottom">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle text-primary me-2"></i>
+                        Project Information
+                    </h5>
+                    <?php if ($this->isAdmin()): ?>
+                    <a href="<?= $this->getBaseUrl() ?>/projects/<?= $project['id'] ?>/edit" class="btn btn-sm btn-primary">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <?php endif; ?>
+                </div>
             </div>
             <div class="card-body">
                 <?php if ($project['description']): ?>
                 <div class="mb-4">
                     <label class="text-muted small fw-semibold mb-2">DESCRIPTION</label>
-                    <div class="comment-content"><?= $project['description'] ?></div>
+                    <div class="text-secondary"><?= nl2br(htmlspecialchars($project['description'])) ?></div>
                 </div>
                 <hr>
                 <?php endif; ?>
@@ -124,14 +126,16 @@
 
         <!-- Work Items Card -->
         <div class="card shadow-sm" data-aos="fade-up" data-aos-delay="100">
-            <div class="card-header bg-white border-bottom position-relative">
-                <h6 class="mb-0 text-dark fw-semibold">
-                    <i class="bi bi-list-task text-primary me-2"></i>
-                    Work Items
-                </h6>
-                <a href="<?= $this->getBaseUrl() ?>/work-items/create?project_id=<?= $project['id'] ?>" class="btn btn-sm btn-primary position-absolute top-50 end-0 translate-middle-y me-3">
-                    <i class="bi bi-plus-lg"></i> Add Work Item
-                </a>
+            <div class="card-header bg-white border-bottom">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">
+                        <i class="bi bi-list-task text-primary me-2"></i>
+                        Work Items
+                    </h5>
+                    <a href="<?= $this->getBaseUrl() ?>/work-items/create?project_id=<?= $project['id'] ?>" class="btn btn-sm btn-primary">
+                        <i class="bi bi-plus-lg"></i> Add Work Item
+                    </a>
+                </div>
             </div>
             <div class="card-body p-0">
                 <?php if (empty($workItems)): ?>
@@ -238,16 +242,18 @@
     <div class="col-lg-4">
         <!-- Team Members Card -->
         <div class="card shadow-sm" data-aos="fade-up" data-aos-delay="200">
-            <div class="card-header bg-white border-bottom position-relative">
-                <h6 class="mb-0 text-dark fw-semibold">
-                    <i class="bi bi-people-fill text-primary me-2"></i>
-                    Team Members
-                </h6>
-                <?php if ($this->isAdmin()): ?>
-                <button class="btn btn-sm btn-outline-primary position-absolute top-50 end-0 translate-middle-y me-3" data-bs-toggle="modal" data-bs-target="#addMemberModal">
-                    <i class="bi bi-plus-lg"></i>
-                </button>
-                <?php endif; ?>
+            <div class="card-header bg-white border-bottom">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">
+                        <i class="bi bi-people-fill text-primary me-2"></i>
+                        Team Members
+                    </h5>
+                    <?php if ($this->isAdmin()): ?>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                    <?php endif; ?>
+                </div>
             </div>
             <div class="card-body">
                 <?php if (empty($members)): ?>

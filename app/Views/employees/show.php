@@ -40,7 +40,7 @@
         <!-- Quick Info Card -->
         <div class="card mb-4">
             <div class="card-header bg-white">
-                <h6 class="mb-0">Quick Information</h6>
+                <h6 class="mb-0 text-dark fw-semibold">Quick Information</h6>
             </div>
             <div class="card-body">
                 <div class="mb-3">
@@ -73,7 +73,7 @@
         <!-- Leave Balances Card -->
         <div class="card">
             <div class="card-header bg-white">
-                <h6 class="mb-0">Leave Balances</h6>
+                <h6 class="mb-0 text-dark fw-semibold">Leave Balances</h6>
             </div>
             <div class="card-body">
                 <?php if (empty($leaveBalances)): ?>
@@ -112,7 +112,7 @@
         <!-- Personal Information -->
         <div class="card mb-4">
             <div class="card-header bg-white">
-                <h5 class="mb-0">Personal Information</h5>
+                <h6 class="mb-0 text-dark fw-semibold">Personal Information</h6>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -151,7 +151,7 @@
         <!-- Employment Information -->
         <div class="card mb-4">
             <div class="card-header bg-white">
-                <h5 class="mb-0">Employment Information</h5>
+                <h6 class="mb-0 text-dark fw-semibold">Employment Information</h6>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -199,7 +199,7 @@
         <?php if (!empty($directReports)): ?>
         <div class="card">
             <div class="card-header bg-white">
-                <h5 class="mb-0">Direct Reports (<?= count($directReports) ?>)</h5>
+                <h6 class="mb-0 text-dark fw-semibold">Direct Reports (<?= count($directReports) ?>)</h6>
             </div>
             <div class="card-body">
                 <div class="list-group list-group-flush">

@@ -34,22 +34,24 @@
     <div class="col-lg-8">
         <!-- Project Details Card -->
         <div class="card shadow-sm mb-4" data-aos="fade-up">
-            <div class="card-header bg-white border-bottom position-relative">
-                <h6 class="mb-0 text-dark fw-semibold">
-                    <i class="bi bi-info-circle text-primary me-2"></i>
-                    Project Information
-                </h6>
-                <?php if ($this->isAdmin()): ?>
-                <a href="<?= $this->getBaseUrl() ?>/projects/<?= $project['id'] ?>/edit" class="btn btn-sm btn-primary position-absolute top-50 end-0 translate-middle-y me-3">
-                    <i class="bi bi-pencil"></i> Edit
-                </a>
-                <?php endif; ?>
+            <div class="card-header bg-white border-bottom">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle text-primary me-2"></i>
+                        Project Information
+                    </h5>
+                    <?php if ($this->isAdmin()): ?>
+                    <a href="<?= $this->getBaseUrl() ?>/projects/<?= $project['id'] ?>/edit" class="btn btn-sm btn-primary">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <?php endif; ?>
+                </div>
             </div>
             <div class="card-body">
                 <?php if ($project['description']): ?>
                 <div class="mb-4">
                     <label class="text-muted small fw-semibold mb-2">DESCRIPTION</label>
-                    <div class="comment-content"><?= $project['description'] ?></div>
+                    <div class="text-secondary"><?= nl2br(htmlspecialchars($project['description'])) ?></div>
                 </div>
                 <hr>
                 <?php endif; ?>
@@ -124,14 +126,16 @@
 
         <!-- Work Items Card -->
         <div class="card shadow-sm" data-aos="fade-up" data-aos-delay="100">
-            <div class="card-header bg-white border-bottom position-relative">
-                <h6 class="mb-0 text-dark fw-semibold">
-                    <i class="bi bi-list-task text-primary me-2"></i>
-                    Work Items
-                </h6>
-                <a href="<?= $this->getBaseUrl() ?>/work-items/create?project_id=<?= $project['id'] ?>" class="btn btn-sm btn-primary position-absolute top-50 end-0 translate-middle-y me-3">
-                    <i class="bi bi-plus-lg"></i> Add Work Item
-                </a>
+            <div class="card-header bg-white border-bottom">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">
+                        <i class="bi bi-list-task text-primary me-2"></i>
+                        Work Items
+                    </h5>
+                    <a href="<?= $this->getBaseUrl() ?>/work-items/create?project_id=<?= $project['id'] ?>" class="btn btn-sm btn-primary">
+                        <i class="bi bi-plus-lg"></i> Add Work Item
+                    </a>
+                </div>
             </div>
             <div class="card-body p-0">
                 <?php if (empty($workItems)): ?>
@@ -156,6 +160,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                        <tbody>
                             <?php foreach ($workItems as $item): ?>
                             <tr onclick="window.location='<?= $this->getBaseUrl() ?>/work-items/<?= $item['id'] ?>'" style="cursor: pointer;">
                                 <td>
@@ -169,10 +174,10 @@
                                         'feature' => ['color' => 'success', 'icon' => 'bi-star'],
                                         'improvement' => ['color' => 'info', 'icon' => 'bi-arrow-up-circle']
                                     ];
-                                    $typeConf = $typeConfig[$item['type'] ?? 'task'] ?? ['color' => 'secondary', 'icon' => 'bi-circle'];
+                                    $typeConf = $typeConfig[$item['type']] ?? ['color' => 'secondary', 'icon' => 'bi-circle'];
                                     ?>
                                     <span class="badge bg-<?= $typeConf['color'] ?>">
-                                        <i class="bi <?= $typeConf['icon'] ?>"></i> <?= ucfirst($item['type'] ?? 'Task') ?>
+                                        <i class="bi <?= $typeConf['icon'] ?>"></i> <?= ucfirst($item['type']) ?>
                                     </span>
                                 </td>
                                 <td>
@@ -185,9 +190,9 @@
                                         'done' => 'success',
                                         'cancelled' => 'danger'
                                     ];
-                                    $statusColor = $statusColors[$item['current_status'] ?? $item['status'] ?? 'todo'] ?? 'secondary';
+                                    $statusColor = $statusColors[$item['current_status']] ?? 'secondary';
                                     ?>
-                                    <span class="badge bg-<?= $statusColor ?>"><?= ucfirst(str_replace('_', ' ', $item['current_status'] ?? $item['status'] ?? 'To Do')) ?></span>
+                                    <span class="badge bg-<?= $statusColor ?>"><?= ucfirst(str_replace('_', ' ', $item['current_status'])) ?></span>
                                 </td>
                                 <td>
                                     <?php if (isset($item['assigned_to_name']) && $item['assigned_to_name']): ?>
@@ -209,14 +214,14 @@
                                         'high' => ['color' => 'danger', 'icon' => 'bi-arrow-up'],
                                         'critical' => ['color' => 'danger', 'icon' => 'bi-exclamation-triangle-fill']
                                     ];
-                                    $priorityConf = $priorityConfig[$item['priority'] ?? 'medium'] ?? ['color' => 'secondary', 'icon' => 'bi-circle'];
+                                    $priorityConf = $priorityConfig[$item['priority']] ?? ['color' => 'secondary', 'icon' => 'bi-circle'];
                                     ?>
                                     <span class="badge bg-<?= $priorityConf['color'] ?>">
-                                        <i class="bi <?= $priorityConf['icon'] ?>"></i> <?= ucfirst($item['priority'] ?? 'Medium') ?>
+                                        <i class="bi <?= $priorityConf['icon'] ?>"></i> <?= ucfirst($item['priority']) ?>
                                     </span>
                                 </td>
                                 <td>
-                                    <?php if (isset($item['due_date']) && $item['due_date']): ?>
+                                    <?php if ($item['due_date']): ?>
                                     <span class="text-muted">
                                         <i class="bi bi-calendar-event"></i>
                                         <?= date('M d, Y', strtotime($item['due_date'])) ?>
@@ -238,16 +243,18 @@
     <div class="col-lg-4">
         <!-- Team Members Card -->
         <div class="card shadow-sm" data-aos="fade-up" data-aos-delay="200">
-            <div class="card-header bg-white border-bottom position-relative">
-                <h6 class="mb-0 text-dark fw-semibold">
-                    <i class="bi bi-people-fill text-primary me-2"></i>
-                    Team Members
-                </h6>
-                <?php if ($this->isAdmin()): ?>
-                <button class="btn btn-sm btn-outline-primary position-absolute top-50 end-0 translate-middle-y me-3" data-bs-toggle="modal" data-bs-target="#addMemberModal">
-                    <i class="bi bi-plus-lg"></i>
-                </button>
-                <?php endif; ?>
+            <div class="card-header bg-white border-bottom">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">
+                        <i class="bi bi-people-fill text-primary me-2"></i>
+                        Team Members
+                    </h5>
+                    <?php if ($this->isAdmin()): ?>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                    <?php endif; ?>
+                </div>
             </div>
             <div class="card-body">
                 <?php if (empty($members)): ?>
@@ -278,6 +285,7 @@
                             </div>
                             <?php if ($this->isAdmin()): ?>
                             <form method="POST" action="<?= $this->getBaseUrl() ?>/projects/<?= $project['id'] ?>/remove-member" style="display: inline;">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                                 <input type="hidden" name="employee_id" value="<?= $member['id'] ?>">
                                 <button type="submit" class="btn btn-sm btn-link text-danger p-0" onclick="return confirm('Remove this member from the project?')" title="Remove member">
                                     <i class="bi bi-x-circle"></i>
@@ -299,7 +307,7 @@
 <div class="modal fade" id="addMemberModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form method="POST" action="<?= $this->getBaseUrl() ?>/projects/<?= $project['id'] ?>/members">
+            <form method="POST" action="<?= $this->getBaseUrl() ?>/projects/<?= $project['id'] ?>/add-member">
                 <div class="modal-header">
                     <h5 class="modal-title">
                         <i class="bi bi-person-plus text-primary"></i>
@@ -308,13 +316,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Select Employee</label>
                         <select name="employee_id" class="form-select" required>
                             <option value="">Choose an employee...</option>
                             <?php
-                            $employeeModel = new Employee();
-                            $allEmployees = $employeeModel->findAll(['employment_status' => 'active'], 'full_name');
+                            require_once __DIR__ . '/../../Models/Employee.php';
+                            $allEmployees = (new Employee())->getAll(['employment_status' => 'active']);
                             foreach ($allEmployees as $emp):
                                 $isMember = false;
                                 foreach ($members as $member) {
@@ -326,7 +335,7 @@
                                 if (!$isMember):
                             ?>
                             <option value="<?= $emp['id'] ?>">
-                                <?= htmlspecialchars($emp['full_name']) ?> <?= isset($emp['designation']) ? '- ' . htmlspecialchars($emp['designation']) : '' ?>
+                                <?= htmlspecialchars($emp['full_name']) ?> - <?= htmlspecialchars($emp['designation'] ?? 'Employee') ?>
                             </option>
                             <?php endif; endforeach; ?>
                         </select>

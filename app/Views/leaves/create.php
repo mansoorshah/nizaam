@@ -39,7 +39,8 @@
 
                     <div class="mb-4">
                         <label for="reason" class="form-label">Reason <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="reason" name="reason" rows="4" required></textarea>
+                        <textarea id="reason" name="reason" style="display:none;" data-required="true"></textarea>
+                        <div class="rich-editor" style="min-height: 150px;" data-placeholder="Explain the reason for your leave request. You can paste images if needed..."></div>
                     </div>
 
                     <div class="d-flex gap-2">

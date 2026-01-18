@@ -10,7 +10,34 @@ class Notification extends Model
                 WHERE employee_id = ? 
                 ORDER BY created_at DESC 
                 LIMIT ?";
-        return $this->db->fetchAll($sql, [$employeeId, $limit]);
+        $notifications = $this->db->fetchAll($sql, [$employeeId, $limit]);
+        
+        // Generate links for notifications based on type and related_id
+        foreach ($notifications as &$notification) {
+            if (!isset($notification['link']) || empty($notification['link'])) {
+                $notification['link'] = $this->generateLink($notification);
+            }
+        }
+        
+        return $notifications;
+    }
+    
+    private function generateLink($notification)
+    {
+        if (empty($notification['related_type']) || empty($notification['related_id'])) {
+            return null;
+        }
+        
+        switch ($notification['related_type']) {
+            case 'work_item':
+                return '/nizaam/public/work-items/' . $notification['related_id'];
+            case 'project':
+                return '/nizaam/public/projects/' . $notification['related_id'];
+            case 'employee':
+                return '/nizaam/public/employees/' . $notification['related_id'];
+            default:
+                return null;
+        }
     }
 
     public function getUnreadCount($employeeId)

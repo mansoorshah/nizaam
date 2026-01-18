@@ -72,9 +72,8 @@
 
                     <div class="mb-3">
                         <label for="notes" class="form-label">Notes</label>
-                        <textarea class="form-control" id="notes" name="notes" 
-                                  rows="3" 
-                                  placeholder="Add any notes about this week's work (optional)"></textarea>
+                        <textarea id="notes" name="notes" style="display:none;"></textarea>
+                        <div class="rich-editor" style="min-height: 150px;" data-placeholder="Add any notes about this week's work. You can format text and paste images if needed..."></div>
                     </div>
 
                     <div class="alert alert-info">

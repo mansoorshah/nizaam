@@ -33,8 +33,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+                        <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                        <textarea id="description" name="description" style="display:none;" data-required="true"></textarea>
+                        <div class="rich-editor" style="min-height: 200px;" data-placeholder="Describe the work item in detail. You can paste images and format text..."></div>
                     </div>
 
                     <div class="row">

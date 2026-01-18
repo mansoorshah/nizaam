@@ -102,6 +102,7 @@ class WorkItemController extends Controller
 
         $validation = Request::validate([
             'title' => 'required|max:255',
+            'description' => 'required',
             'type' => 'required',
             'priority' => 'required'
         ]);

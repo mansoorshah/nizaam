@@ -51,9 +51,8 @@
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="description" name="description" 
-                                  rows="4" required 
-                                  placeholder="Provide details about this expense..."></textarea>
+                        <textarea id="description" name="description" style="display:none;" data-required="true"></textarea>
+                        <div class="rich-editor" style="min-height: 200px;" data-placeholder="Provide details about this expense. You can paste receipts/images and format text..."></div>
                     </div>
 
                     <div class="alert alert-info">

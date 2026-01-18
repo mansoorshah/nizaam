@@ -36,6 +36,8 @@ $router->get('/projects', [ProjectController::class, 'index'], [AuthMiddleware::
 $router->get('/projects/create', [ProjectController::class, 'create'], [AdminMiddleware::class]);
 $router->post('/projects/store', [ProjectController::class, 'store'], [AdminMiddleware::class]);
 $router->get('/projects/{id}', [ProjectController::class, 'show'], [AuthMiddleware::class]);
+$router->get('/projects/{id}/edit', [ProjectController::class, 'edit'], [AdminMiddleware::class]);
+$router->post('/projects/{id}/edit', [ProjectController::class, 'update'], [AdminMiddleware::class]);
 $router->post('/projects/{id}/members', [ProjectController::class, 'addMember'], [AuthMiddleware::class]);
 
 // Leave routes
@@ -55,7 +57,7 @@ $router->get('/audit', [AuditController::class, 'index'], [AdminMiddleware::clas
 
 // Expense routes
 $router->get('/expenses/create', [ExpenseController::class, 'create'], [AuthMiddleware::class]);
-$router->post('/expenses/create', [ExpenseController::class, 'store'], [AuthMiddleware::class]);
+$router->post('/expenses/store', [ExpenseController::class, 'store'], [AuthMiddleware::class]);
 
 // Timesheet routes
 $router->get('/timesheets/create', [TimesheetController::class, 'create'], [AuthMiddleware::class]);

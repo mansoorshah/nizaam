@@ -9,12 +9,12 @@
 <div class="row">
     <div class="col-md-8">
         <!-- Work Item Details -->
-        <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+                <h6 class="mb-0 text-dark fw-semibold">
                     <span class="badge bg-secondary me-2"><?= ucfirst(str_replace('_', ' ', $workItem['type'])) ?></span>
                     <?= htmlspecialchars($workItem['title']) ?>
-                </h5>
+                </h6>
                 <span class="status-badge" style="background-color: <?= $workItem['status_color'] ?>20; color: <?= $workItem['status_color'] ?>;">
                     <?= htmlspecialchars($workItem['status_name']) ?>
                 </span>
@@ -22,7 +22,13 @@
             <div class="card-body">
                 <div class="mb-4">
                     <h6>Description</h6>
-                    <p><?= nl2br(htmlspecialchars($workItem['description'] ?? 'No description provided')) ?></p>
+                    <div class="comment-content">
+                        <?php if (!empty($workItem['description'])): ?>
+                            <?= $workItem['description'] ?>
+                        <?php else: ?>
+                            <p class="text-muted">No description provided</p>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <div class="row mb-4">
@@ -78,34 +84,69 @@
         </div>
 
         <!-- Comments -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h6 class="mb-0">Comments</h6>
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-white border-bottom">
+                <h6 class="mb-0 text-dark fw-semibold">
+                    <i class="bi bi-chat-dots text-primary me-2"></i>
+                    Comments (<?= count($comments) ?>)
+                </h6>
             </div>
             <div class="card-body">
                 <?php if (empty($comments)): ?>
-                <p class="text-muted">No comments yet</p>
-                <?php else: ?>
-                <?php foreach ($comments as $comment): ?>
-                <div class="mb-3 pb-3 border-bottom">
-                    <div class="d-flex justify-content-between mb-2">
-                        <strong><?= htmlspecialchars($comment['author_name']) ?></strong>
-                        <small class="text-muted"><?= date('M d, Y H:i', strtotime($comment['created_at'])) ?></small>
-                    </div>
-                    <p class="mb-0"><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
+                <div class="text-center py-4">
+                    <i class="bi bi-chat display-1 text-muted opacity-25"></i>
+                    <p class="text-muted mt-3 mb-0">No comments yet. Be the first to comment!</p>
                 </div>
-                <?php endforeach; ?>
+                <?php else: ?>
+                <div class="comments-list">
+                    <?php foreach ($comments as $comment): ?>
+                    <div class="comment-item mb-4 pb-3 border-bottom" data-aos="fade-up">
+                        <div class="d-flex gap-3">
+                            <div class="user-avatar-small">
+                                <?= strtoupper(substr($comment['author_name'], 0, 1)) ?>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <strong class="text-dark"><?= htmlspecialchars($comment['author_name']) ?></strong>
+                                        <small class="text-muted ms-2">
+                                            <i class="bi bi-clock"></i>
+                                            <?php
+                                            $time = strtotime($comment['created_at']);
+                                            $diff = time() - $time;
+                                            if ($diff < 60) echo 'Just now';
+                                            elseif ($diff < 3600) echo floor($diff / 60) . ' min ago';
+                                            elseif ($diff < 86400) echo floor($diff / 3600) . ' hours ago';
+                                            else echo date('M d, Y H:i', $time);
+                                            ?>
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="comment-content">
+                                    <?= $comment['comment'] ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
                 <?php endif; ?>
 
-                <form method="POST" action="<?= $this->getBaseUrl() ?>/work-items/<?= $workItem['id'] ?>/comment">
-                    <input type="hidden" name="csrf_token" value="<?= Session::csrfToken() ?>">
-                    <div class="mb-3">
-                        <textarea class="form-control" name="comment" rows="3" placeholder="Add a comment..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        <i class="bi bi-send"></i> Post Comment
-                    </button>
-                </form>
+                <div class="comment-form mt-4">
+                    <form method="POST" action="<?= $this->getBaseUrl() ?>/work-items/<?= $workItem['id'] ?>/comment">
+                        <input type="hidden" name="csrf_token" value="<?= Session::csrfToken() ?>">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Add a Comment</label>
+                            <textarea name="comment" style="display:none;" data-required="true"></textarea>
+                            <div class="rich-editor" style="min-height: 120px;" data-placeholder="Share your thoughts, ask questions, or provide updates..."></div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-send"></i> Post Comment
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -113,9 +154,12 @@
     <!-- Sidebar -->
     <div class="col-md-4">
         <!-- Status History -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h6 class="mb-0">Status History</h6>
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-white border-bottom">
+                <h6 class="mb-0 text-dark fw-semibold">
+                    <i class="bi bi-clock-history text-primary me-2"></i>
+                    Status History
+                </h6>
             </div>
             <div class="card-body">
                 <?php if (empty($history)): ?>

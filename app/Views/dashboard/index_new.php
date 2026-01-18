@@ -156,7 +156,7 @@
                         </thead>
                         <tbody>
                             <?php foreach (array_slice($myWorkItems, 0, 5) as $item): ?>
-                            <tr style="cursor: pointer;" onclick="window.location='<?= $this->getBaseUrl() ?>/work-items/<?= $item['id'] ?>'">
+                            <tr>
                                 <td>
                                     <a href="<?= $this->getBaseUrl() ?>/work-items/<?= $item['id'] ?>" class="text-decoration-none fw-semibold">
                                         <?= htmlspecialchars($item['title']) ?>

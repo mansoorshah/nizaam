@@ -87,6 +87,56 @@ class ProjectController extends Controller
         $this->redirect('/projects/' . $projectId);
     }
 
+    public function edit($id)
+    {
+        if (!$this->isAdmin()) {
+            http_response_code(403);
+            echo "403 - Access Denied";
+            return;
+        }
+
+        $project = $this->projectModel->getWithOwner($id);
+        if (!$project) {
+            $this->redirect('/projects');
+            return;
+        }
+
+        $employees = $this->employeeModel->getAllWithUsers(['employment_status' => 'active']);
+        if (empty($employees)) {
+            $employees = $this->employeeModel->getAll();
+        }
+
+        $this->view('projects.edit', [
+            'project' => $project,
+            'employees' => $employees
+        ]);
+    }
+
+    public function update($id)
+    {
+        if (!Request::isPost() || !$this->isAdmin()) {
+            $this->redirect('/projects/' . $id);
+            return;
+        }
+
+        $this->projectModel->update($id, [
+            'name' => Request::input('name'),
+            'description' => Request::input('description'),
+            'owner_id' => Request::input('owner_id'),
+            'status' => Request::input('status')
+        ]);
+
+        $this->auditLog->log(
+            $this->getCurrentUser()['id'],
+            'update',
+            'project',
+            $id
+        );
+
+        Session::flash('success', 'Project updated successfully');
+        $this->redirect('/projects/' . $id);
+    }
+
     public function addMember($id)
     {
         if (!Request::isPost()) {

@@ -23,7 +23,8 @@
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+                        <textarea id="description" name="description" style="display:none;"></textarea>
+                        <div class="rich-editor" style="min-height: 200px;" data-placeholder="Describe the project goals, scope, and deliverables. You can paste images and format text..."></div>
                     </div>
 
                     <div class="row">
