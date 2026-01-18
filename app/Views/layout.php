@@ -1187,15 +1187,17 @@
             border: none;
             padding: 0;
             margin-top: 0.5rem;
-            background: var(--nizaam-card-bg);
-            border: 1px solid var(--nizaam-border-color);
+            background: white;
+            border: 1px solid var(--bs-border-color);
             border-radius: 12px;
             overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
         
         [data-bs-theme="dark"] .notification-panel {
             background: #1e293b;
             border-color: rgba(59, 130, 246, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
         
         .notification-header {
@@ -1226,7 +1228,7 @@
             max-height: 420px;
             overflow-y: auto;
             padding: 0;
-            background: var(--nizaam-card-bg);
+            background: white;
         }
         
         [data-bs-theme="dark"] .notification-body {
@@ -1356,7 +1358,7 @@
             align-items: center;
             padding: 0.75rem 1.25rem;
             border-top: 1px solid var(--bs-border-color);
-            background: var(--bs-light);
+            background: #f8f9fa;
         }
         
         [data-bs-theme="dark"] .notification-footer {
