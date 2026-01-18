@@ -51,8 +51,8 @@
         <div class="card h-100 shadow-sm">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <h5 class="card-title mb-0">
-                        <a href="<?= dirname($_SERVER['SCRIPT_NAME']) === '/' ? '' : dirname($_SERVER['SCRIPT_NAME']) ?>/projects/<?= $project['id'] ?>" class="text-decoration-none text-dark">
+                    <h5 class="card-title mb-0 project-title">
+                        <a href="<?= dirname($_SERVER['SCRIPT_NAME']) === '/' ? '' : dirname($_SERVER['SCRIPT_NAME']) ?>/projects/<?= $project['id'] ?>" class="text-decoration-none project-link">
                             <?= htmlspecialchars($project['name']) ?>
                         </a>
                     </h5>
@@ -70,7 +70,11 @@
 
                 <?php if ($project['description']): ?>
                 <p class="card-text text-muted small mb-3">
-                    <?= htmlspecialchars(substr($project['description'], 0, 100)) ?><?= strlen($project['description']) > 100 ? '...' : '' ?>
+                    <?php 
+                    // Strip HTML tags and get plain text
+                    $plainText = strip_tags($project['description']);
+                    echo htmlspecialchars(substr($plainText, 0, 100)) . (strlen($plainText) > 100 ? '...' : '');
+                    ?>
                 </p>
                 <?php endif; ?>
 
@@ -103,11 +107,68 @@
 
 <style>
 .card {
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid rgba(0,0,0,0.125);
 }
 
 .card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1) !important;
+}
+
+/* Dark mode card improvements */
+[data-bs-theme="dark"] .card {
+    background-color: #2d3748;
+    border-color: #4a5568;
+}
+
+[data-bs-theme="dark"] .card:hover {
+    background-color: #374151;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3) !important;
+}
+
+/* Project title styling */
+.project-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.project-link {
+    color: #1a202c;
+    transition: color 0.2s;
+}
+
+.project-link:hover {
+    color: #3182ce;
+}
+
+/* Dark mode project title */
+[data-bs-theme="dark"] .project-link {
+    color: #f7fafc !important;
+}
+
+[data-bs-theme="dark"] .project-link:hover {
+    color: #63b3ed !important;
+}
+
+/* Card footer improvements */
+.card-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid rgba(0,0,0,0.125);
+}
+
+[data-bs-theme="dark"] .card-footer {
+    background-color: #1a202c !important;
+    border-top-color: #4a5568 !important;
+}
+
+/* Better text contrast in dark mode */
+[data-bs-theme="dark"] .text-muted {
+    color: #a0aec0 !important;
+}
+
+[data-bs-theme="dark"] .small.text-muted {
+    color: #cbd5e0 !important;
 }
 </style>
 

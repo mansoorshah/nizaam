@@ -117,4 +117,13 @@ class WorkItem extends Model
             return false;
         }
     }
+
+    public function addComment($workItemId, $employeeId, $comment)
+    {
+        $sql = "INSERT INTO work_item_history (work_item_id, from_status_id, to_status_id, changed_by, comment, created_at)
+                SELECT current_status_id, current_status_id, current_status_id, ?, ?, NOW()
+                FROM work_items WHERE id = ?";
+        $this->db->execute($sql, [$employeeId, $comment, $workItemId]);
+        return $this->db->lastInsertId();
+    }
 }

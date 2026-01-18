@@ -75,7 +75,7 @@
     </div>
 
     <div class="col-md-4">
-        <div class="card bg-light">
+        <div class="card">
             <div class="card-body">
                 <h6 class="card-title">💡 Expense Guidelines</h6>
                 <ul class="small mb-0">

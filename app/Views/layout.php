@@ -402,6 +402,30 @@
             align-items: center;
             justify-content: space-between;
         }
+        
+        /* Dark mode card header with brand gradient */
+        [data-bs-theme="dark"] .card-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+            color: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        [data-bs-theme="dark"] .card-header a,
+        [data-bs-theme="dark"] .card-header i,
+        [data-bs-theme="dark"] .card-header .btn,
+        [data-bs-theme="dark"] .card-header h1,
+        [data-bs-theme="dark"] .card-header h2,
+        [data-bs-theme="dark"] .card-header h3,
+        [data-bs-theme="dark"] .card-header h4,
+        [data-bs-theme="dark"] .card-header h5,
+        [data-bs-theme="dark"] .card-header h6 {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        [data-bs-theme="dark"] .card-header .btn:hover,
+        [data-bs-theme="dark"] .card-header a:hover {
+            color: white !important;
+        }
 
         .card-body {
             padding: 1.5rem;

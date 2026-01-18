@@ -73,4 +73,14 @@ class Database
     {
         return $this->connection->rollBack();
     }
+
+    public function insert($table, $data)
+    {
+        $columns = implode(', ', array_keys($data));
+        $placeholders = implode(', ', array_fill(0, count($data), '?'));
+        $sql = "INSERT INTO {$table} ({$columns}) VALUES ({$placeholders})";
+        
+        $this->query($sql, array_values($data));
+        return $this->lastInsertId();
+    }
 }

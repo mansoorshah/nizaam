@@ -15,6 +15,21 @@ class Router
         $this->addRoute('POST', $path, $handler, $middlewares);
     }
 
+    public function put($path, $handler, $middlewares = [])
+    {
+        $this->addRoute('PUT', $path, $handler, $middlewares);
+    }
+
+    public function delete($path, $handler, $middlewares = [])
+    {
+        $this->addRoute('DELETE', $path, $handler, $middlewares);
+    }
+
+    public function patch($path, $handler, $middlewares = [])
+    {
+        $this->addRoute('PATCH', $path, $handler, $middlewares);
+    }
+
     private function addRoute($method, $path, $handler, $middlewares = [])
     {
         $this->routes[] = [
@@ -28,6 +43,14 @@ class Router
     public function dispatch()
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
+        
+        // Handle HTTP method override for PUT, DELETE, PATCH
+        if ($requestMethod === 'POST' && isset($_POST['_method'])) {
+            $requestMethod = strtoupper($_POST['_method']);
+        } elseif ($requestMethod === 'POST' && isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) {
+            $requestMethod = strtoupper($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE']);
+        }
+        
         $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         
         // Remove base path if accessing from subfolder
@@ -37,6 +60,12 @@ class Router
         }
         
         $requestUri = $requestUri ?: '/';
+
+        // Debug output for API routes
+        if (strpos($requestUri, '/api/') === 0) {
+            error_log("API Route Debug - Method: $requestMethod, URI: $requestUri");
+            error_log("Registered routes: " . count($this->routes));
+        }
 
         foreach ($this->routes as $route) {
             if ($route['method'] !== $requestMethod) {

@@ -25,6 +25,7 @@ require_once __DIR__ . '/../app/Models/Workflow.php';
 require_once __DIR__ . '/../app/Models/Project.php';
 require_once __DIR__ . '/../app/Models/Notification.php';
 require_once __DIR__ . '/../app/Models/AuditLog.php';
+require_once __DIR__ . '/../app/Models/LeaveType.php';
 
 // Autoload services
 require_once __DIR__ . '/../app/Services/WorkflowService.php';
@@ -42,6 +43,16 @@ require_once __DIR__ . '/../app/Controllers/ReportController.php';
 require_once __DIR__ . '/../app/Controllers/AuditController.php';
 require_once __DIR__ . '/../app/Controllers/ExpenseController.php';
 require_once __DIR__ . '/../app/Controllers/TimesheetController.php';
+
+// Autoload API controllers
+require_once __DIR__ . '/../app/Controllers/Api/ApiController.php';
+require_once __DIR__ . '/../app/Controllers/Api/ApiAuthController.php';
+require_once __DIR__ . '/../app/Controllers/Api/WorkItemApiController.php';
+require_once __DIR__ . '/../app/Controllers/Api/ProjectApiController.php';
+require_once __DIR__ . '/../app/Controllers/Api/EmployeeApiController.php';
+require_once __DIR__ . '/../app/Controllers/Api/LeaveApiController.php';
+require_once __DIR__ . '/../app/Controllers/Api/ExpenseApiController.php';
+require_once __DIR__ . '/../app/Controllers/Api/TimesheetApiController.php';
 
 // Set timezone
 date_default_timezone_set('UTC');

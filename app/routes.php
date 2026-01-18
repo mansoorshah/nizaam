@@ -63,5 +63,82 @@ $router->post('/expenses/store', [ExpenseController::class, 'store'], [AuthMiddl
 $router->get('/timesheets/create', [TimesheetController::class, 'create'], [AuthMiddleware::class]);
 $router->post('/timesheets/create', [TimesheetController::class, 'store'], [AuthMiddleware::class]);
 
+// ============================================
+// REST API ROUTES
+// ============================================
+
+// Authentication endpoints (no auth required)
+$router->post('/api/auth/login', [ApiAuthController::class, 'login']);
+$router->post('/api/auth/logout', [ApiAuthController::class, 'logout']);
+$router->post('/api/auth/refresh', [ApiAuthController::class, 'refresh']);
+$router->get('/api/auth/me', [ApiAuthController::class, 'me']);
+
+// API Test endpoint (no auth required)
+$router->get('/api/test', function() {
+    header('Content-Type: application/json');
+    echo json_encode(['status' => 'success', 'message' => 'API is working', 'timestamp' => date('Y-m-d H:i:s')]);
+    exit;
+});
+
+// Debug: Output what routes are registered
+if (isset($_GET['debug']) && $_GET['debug'] === 'routes') {
+    echo "<pre>";
+    echo "Request URI: " . $_SERVER['REQUEST_URI'] . "\n";
+    echo "Script Name: " . $_SERVER['SCRIPT_NAME'] . "\n";
+    echo "Base Path: " . dirname($_SERVER['SCRIPT_NAME']) . "\n";
+    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $scriptName = dirname($_SERVER['SCRIPT_NAME']);
+    if ($scriptName !== '/') {
+        $uri = substr($uri, strlen($scriptName));
+    }
+    echo "Parsed URI: " . $uri . "\n";
+    echo "</pre>";
+    exit;
+}
+
+// Work Items API
+$router->get('/api/work-items', [WorkItemApiController::class, 'index']);
+$router->get('/api/work-items/{id}', [WorkItemApiController::class, 'show']);
+$router->post('/api/work-items', [WorkItemApiController::class, 'store']);
+$router->put('/api/work-items/{id}', [WorkItemApiController::class, 'update']);
+$router->delete('/api/work-items/{id}', [WorkItemApiController::class, 'delete']);
+$router->post('/api/work-items/{id}/status', [WorkItemApiController::class, 'updateStatus']);
+$router->post('/api/work-items/{id}/comments', [WorkItemApiController::class, 'addComment']);
+
+// Projects API
+$router->get('/api/projects', [ProjectApiController::class, 'index']);
+$router->get('/api/projects/{id}', [ProjectApiController::class, 'show']);
+$router->post('/api/projects', [ProjectApiController::class, 'store']);
+$router->put('/api/projects/{id}', [ProjectApiController::class, 'update']);
+$router->delete('/api/projects/{id}', [ProjectApiController::class, 'delete']);
+$router->post('/api/projects/{id}/members', [ProjectApiController::class, 'addMember']);
+$router->delete('/api/projects/{id}/members/{employeeId}', [ProjectApiController::class, 'removeMember']);
+
+// Employees API
+$router->get('/api/employees', [EmployeeApiController::class, 'index']);
+$router->get('/api/employees/{id}', [EmployeeApiController::class, 'show']);
+$router->post('/api/employees', [EmployeeApiController::class, 'store']);
+$router->put('/api/employees/{id}', [EmployeeApiController::class, 'update']);
+$router->delete('/api/employees/{id}', [EmployeeApiController::class, 'delete']);
+
+// Leaves API
+$router->get('/api/leaves', [LeaveApiController::class, 'index']);
+$router->get('/api/leaves/{id}', [LeaveApiController::class, 'show']);
+$router->post('/api/leaves', [LeaveApiController::class, 'store']);
+$router->get('/api/leave-types', [LeaveApiController::class, 'leaveTypes']);
+$router->get('/api/leave-balance', [LeaveApiController::class, 'balance']);
+
+// Expenses API
+$router->get('/api/expenses', [ExpenseApiController::class, 'index']);
+$router->get('/api/expenses/{id}', [ExpenseApiController::class, 'show']);
+$router->post('/api/expenses', [ExpenseApiController::class, 'store']);
+$router->delete('/api/expenses/{id}', [ExpenseApiController::class, 'delete']);
+
+// Timesheets API
+$router->get('/api/timesheets', [TimesheetApiController::class, 'index']);
+$router->get('/api/timesheets/{id}', [TimesheetApiController::class, 'show']);
+$router->post('/api/timesheets', [TimesheetApiController::class, 'store']);
+$router->delete('/api/timesheets/{id}', [TimesheetApiController::class, 'delete']);
+
 // Dispatch
 $router->dispatch();

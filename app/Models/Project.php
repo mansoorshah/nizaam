@@ -12,6 +12,12 @@ class Project extends Model
                 WHERE p.id = ? LIMIT 1";
         return $this->db->fetchOne($sql, [$id]);
     }
+    
+    public function getWithDetails($id)
+    {
+        // Alias for getWithOwner for API consistency
+        return $this->getWithOwner($id);
+    }
 
     public function getAllWithOwners($filters = [])
     {

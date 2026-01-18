@@ -18,6 +18,12 @@ class Employee extends Model
                 WHERE e.id = ? LIMIT 1";
         return $this->db->fetchOne($sql, [$id]);
     }
+    
+    public function getWithUser($id)
+    {
+        // Alias for findWithUser for API consistency
+        return $this->findWithUser($id);
+    }
 
     public function getAllWithUsers($filters = [])
     {

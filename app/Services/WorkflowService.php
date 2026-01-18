@@ -57,13 +57,16 @@ class WorkflowService
         }
 
         // Audit log
-        $this->auditLog->log(
-            Session::get('user')['id'],
-            'create',
-            'work_item',
-            $workItemId,
-            ['type' => $type, 'title' => $title]
-        );
+        $user = Session::get('user') ?? $_SESSION['api_user'] ?? null;
+        if ($user && isset($user['id'])) {
+            $this->auditLog->log(
+                $user['id'],
+                'create',
+                'work_item',
+                $workItemId,
+                ['type' => $type, 'title' => $title]
+            );
+        }
 
         return $workItemId;
     }

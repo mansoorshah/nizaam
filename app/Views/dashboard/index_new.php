@@ -287,7 +287,11 @@
                                     </a>
                                 </h6>
                                 <p class="card-text small text-muted">
-                                    <?= htmlspecialchars(substr($project['description'] ?? '', 0, 100)) ?><?= strlen($project['description'] ?? '') > 100 ? '...' : '' ?>
+                                    <?php 
+                                    // Strip HTML tags and get plain text
+                                    $plainText = strip_tags($project['description'] ?? '');
+                                    echo htmlspecialchars(substr($plainText, 0, 100)) . (strlen($plainText) > 100 ? '...' : '');
+                                    ?>
                                 </p>
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <span class="badge bg-success"><?= ucfirst($project['status']) ?></span>
