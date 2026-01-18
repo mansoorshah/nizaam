@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'Nizaam' ?> - Company OS</title>
     
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%234169E1' rx='8'/><g fill='white'><circle cx='50' cy='25' r='6'/><circle cx='30' cy='55' r='6'/><circle cx='50' cy='55' r='6'/><circle cx='70' cy='55' r='6'/><line x1='50' y1='31' x2='50' y2='49' stroke='white' stroke-width='3'/><line x1='50' y1='55' x2='30' y2='55' stroke='white' stroke-width='3'/><line x1='50' y1='55' x2='70' y2='55' stroke='white' stroke-width='3'/><rect x='45' y='70' width='10' height='20' fill='white'/><rect x='25' y='70' width='10' height='20' fill='white'/><rect x='65' y='70' width='10' height='20' fill='white'/></g></svg>">
+    
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -923,28 +926,53 @@
             padding: 0.5rem 1rem;
             border-radius: 12px;
             transition: all var(--transition-fast);
+            text-decoration: none;
+            border: 1px solid transparent;
         }
 
         .user-profile:hover {
-            background: var(--nizaam-gray-100);
+            background: rgba(59, 130, 246, 0.08);
+            border-color: rgba(59, 130, 246, 0.2);
         }
 
         [data-bs-theme="dark"] .user-profile:hover {
-            background: var(--nizaam-gray-800);
+            background: rgba(59, 130, 246, 0.12);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .user-profile span {
+            color: var(--nizaam-text);
+            font-weight: 500;
+            font-size: 0.9375rem;
+        }
+        
+        [data-bs-theme="dark"] .user-profile span {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .user-profile::after {
+            color: var(--nizaam-text);
+        }
+        
+        [data-bs-theme="dark"] .user-profile::after {
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--nizaam-primary) 0%, var(--nizaam-secondary) 100%);
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: #3b82f6;
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 1rem;
-            box-shadow: var(--shadow-md);
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+        
+        [data-bs-theme="dark"] .user-avatar {
+            background: #3b82f6;
         }
         
         .user-avatar-small {
@@ -967,6 +995,13 @@
             border-radius: 12px;
             padding: 0.5rem;
             margin-top: 0.5rem;
+            background: var(--bs-body-bg);
+        }
+        
+        [data-bs-theme="dark"] .dropdown-menu {
+            background: #1e293b;
+            border-color: rgba(59, 130, 246, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
 
         .dropdown-item {
@@ -974,6 +1009,26 @@
             padding: 0.625rem 1rem;
             font-size: 0.875rem;
             transition: all var(--transition-fast);
+            color: var(--nizaam-text);
+        }
+        
+        [data-bs-theme="dark"] .dropdown-item {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--nizaam-primary);
+        }
+        
+        [data-bs-theme="dark"] .dropdown-item:hover {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+        }
+        
+        .dropdown-item i {
+            width: 20px;
+            margin-right: 0.5rem;
         }
 
         .dropdown-item:hover {
@@ -1132,6 +1187,15 @@
             border: none;
             padding: 0;
             margin-top: 0.5rem;
+            background: var(--nizaam-card-bg);
+            border: 1px solid var(--nizaam-border-color);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        [data-bs-theme="dark"] .notification-panel {
+            background: #1e293b;
+            border-color: rgba(59, 130, 246, 0.2);
         }
         
         .notification-header {
@@ -1139,14 +1203,34 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 1.25rem;
-            border-bottom: 1px solid var(--bs-border-color);
-            background: var(--bs-light);
+            border-bottom: 1px solid var(--nizaam-border-color);
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .notification-header h6 {
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+        }
+        
+        .notification-header h6 i {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .notification-header .badge {
+            background: rgba(255, 255, 255, 0.2) !important;
+            color: white;
         }
         
         .notification-body {
             max-height: 420px;
             overflow-y: auto;
             padding: 0;
+            background: var(--nizaam-card-bg);
+        }
+        
+        [data-bs-theme="dark"] .notification-body {
+            background: #1e293b;
         }
         
         .notification-body::-webkit-scrollbar {
@@ -1158,19 +1242,28 @@
         }
         
         .notification-body::-webkit-scrollbar-thumb {
-            background: var(--bs-border-color);
+            background: rgba(59, 130, 246, 0.3);
             border-radius: 3px;
+        }
+        
+        .notification-body::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
         }
         
         .notification-item {
             display: flex;
             gap: 0.75rem;
             padding: 1rem 1.25rem;
-            border-bottom: 1px solid var(--bs-border-color);
+            border-bottom: 1px solid var(--nizaam-border-color);
             text-decoration: none;
             color: inherit;
             transition: var(--transition-base);
             position: relative;
+            background: transparent;
+        }
+        
+        [data-bs-theme="dark"] .notification-item {
+            border-bottom-color: rgba(59, 130, 246, 0.15);
         }
         
         .notification-item:last-child {
@@ -1178,11 +1271,19 @@
         }
         
         .notification-item:hover {
-            background: var(--bs-light);
+            background: rgba(59, 130, 246, 0.08);
+        }
+        
+        [data-bs-theme="dark"] .notification-item:hover {
+            background: rgba(59, 130, 246, 0.1);
         }
         
         .notification-item-unread {
-            background: rgba(59, 130, 246, 0.05);
+            background: rgba(59, 130, 246, 0.08);
+        }
+        
+        [data-bs-theme="dark"] .notification-item-unread {
+            background: rgba(59, 130, 246, 0.12);
         }
         
         .notification-item-icon {
@@ -1199,6 +1300,12 @@
             color: white;
         }
         
+        .icon-circle-primary { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .icon-circle-success { background: linear-gradient(135deg, #10b981, #059669); }
+        .icon-circle-warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .icon-circle-danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .icon-circle-info { background: linear-gradient(135deg, #06b6d4, #0891b2); }
+        
         .notification-item-content {
             flex: 1;
             min-width: 0;
@@ -1209,6 +1316,10 @@
             font-size: 0.875rem;
             margin-bottom: 0.25rem;
             color: var(--nizaam-text);
+        }
+        
+        [data-bs-theme="dark"] .notification-item-title {
+            color: rgba(255, 255, 255, 0.95);
         }
         
         .notification-item-message {
@@ -1222,9 +1333,17 @@
             -webkit-box-orient: vertical;
         }
         
+        [data-bs-theme="dark"] .notification-item-message {
+            color: rgba(148, 163, 184, 0.85);
+        }
+        
         .notification-item-time {
             font-size: 0.75rem;
             color: var(--bs-tertiary-color);
+        }
+        
+        [data-bs-theme="dark"] .notification-item-time {
+            color: rgba(148, 163, 184, 0.7);
         }
         
         .notification-item-badge {
@@ -1240,6 +1359,11 @@
             background: var(--bs-light);
         }
         
+        [data-bs-theme="dark"] .notification-footer {
+            background: #1e293b;
+            border-top-color: rgba(59, 130, 246, 0.2);
+        }
+        
         .notification-footer a,
         .notification-footer button {
             font-size: 0.875rem;
@@ -1247,8 +1371,38 @@
             color: var(--nizaam-primary);
         }
         
+        [data-bs-theme="dark"] .notification-footer a,
+        [data-bs-theme="dark"] .notification-footer button {
+            color: #60a5fa;
+        }
+        
         .notification-footer button:hover {
             color: var(--nizaam-secondary);
+        }
+        
+        [data-bs-theme="dark"] .notification-footer a:hover,
+        [data-bs-theme="dark"] .notification-footer button:hover {
+            color: #93c5fd;
+        }
+        
+        .notification-empty {
+            padding: 3rem 2rem;
+            text-align: center;
+            color: rgba(148, 163, 184, 0.8);
+        }
+        
+        [data-bs-theme="dark"] .notification-empty {
+            color: rgba(148, 163, 184, 0.7);
+        }
+        
+        .notification-empty i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: rgba(148, 163, 184, 0.5);
+        }
+        
+        [data-bs-theme="dark"] .notification-empty i {
+            color: rgba(148, 163, 184, 0.4);
         }
 
         /* Responsive utilities */
@@ -1482,18 +1636,37 @@
                 
                 <!-- User Profile Dropdown -->
                 <div class="dropdown">
-                    <button class="btn btn-link dropdown-toggle user-profile p-0" type="button" data-bs-toggle="dropdown">
+                    <button class="btn btn-link dropdown-toggle user-profile p-0 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="user-avatar">
                             <?php $empName = Session::get('employee')['full_name'] ?? 'User'; ?>
                             <?= strtoupper(substr($empName, 0, 1)) ?>
                         </div>
-                        <span class="d-none d-md-inline"><?= htmlspecialchars($empName) ?></span>
+                        <div class="d-none d-lg-flex flex-column align-items-start text-start">
+                            <span style="line-height: 1.2; font-weight: 600;"><?= htmlspecialchars($empName) ?></span>
+                            <small style="font-size: 0.75rem; opacity: 0.7; font-weight: 400;"><?= htmlspecialchars(Session::get('employee')['designation'] ?? 'Employee') ?></small>
+                        </div>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow">
                         <?php if (Session::get('employee')): ?>
+                        <li class="px-3 py-2 border-bottom" style="border-color: var(--bs-border-color) !important;">
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="user-avatar" style="width: 48px; height: 48px; font-size: 1.25rem;">
+                                    <?= strtoupper(substr($empName, 0, 1)) ?>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 600; font-size: 0.9375rem;"><?= htmlspecialchars($empName) ?></div>
+                                    <div style="font-size: 0.8125rem; opacity: 0.7;"><?= htmlspecialchars(Session::get('employee')['email'] ?? '') ?></div>
+                                </div>
+                            </div>
+                        </li>
                         <li>
                             <a class="dropdown-item" href="<?= $this->getBaseUrl() ?>/employees/<?= Session::get('employee')['id'] ?>">
                                 <i class="bi bi-person-circle"></i> My Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="<?= $this->getBaseUrl() ?>/settings">
+                                <i class="bi bi-gear"></i> Settings
                             </a>
                         </li>
                         <li><hr class="dropdown-divider"></li>

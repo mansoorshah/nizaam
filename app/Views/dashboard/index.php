@@ -86,8 +86,10 @@
 <!-- Quick Actions - Modern Card Grid -->
 <div class="card mb-4" data-aos="fade-up">
     <div class="card-header">
-        <i class="bi bi-lightning-charge-fill me-2"></i>
-        Quick Actions
+        <div>
+            <i class="bi bi-lightning-charge-fill me-2"></i>
+            Quick Actions
+        </div>
     </div>
     <div class="card-body">
         <div class="row g-3">
@@ -202,11 +204,11 @@
     <!-- Recent Notifications & Activity -->
     <div class="col-lg-4" data-aos="fade-left">
         <div class="card h-100">
-            <div class="card-header">
+            <div class="card-header d-flex align-items-center">
                 <i class="bi bi-bell me-2"></i>
-                Recent Notifications
+                <span class="flex-grow-1">Recent Notifications</span>
                 <?php if ($unreadCount > 0): ?>
-                <span class="badge bg-danger ms-2"><?= $unreadCount ?></span>
+                <span class="badge bg-danger"><?= $unreadCount ?></span>
                 <?php endif; ?>
             </div>
             <div class="card-body" style="max-height: 500px; overflow-y: auto;">
