@@ -1,7 +1,5 @@
 <?php ob_start(); ?>
 
-<h2 class="mb-4">Audit Log</h2>
-
 <!-- Filters -->
 <div class="card mb-4">
     <div class="card-body">

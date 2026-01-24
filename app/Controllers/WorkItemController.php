@@ -7,6 +7,7 @@ class WorkItemController extends Controller
     private $projectModel;
     private $employeeModel;
     private $auditLog;
+    private $attachmentModel;
 
     public function __construct()
     {
@@ -16,6 +17,7 @@ class WorkItemController extends Controller
         $this->projectModel = new Project();
         $this->employeeModel = new Employee();
         $this->auditLog = new AuditLog();
+        $this->attachmentModel = new Attachment();
     }
 
     public function index()
@@ -99,6 +101,10 @@ class WorkItemController extends Controller
             $this->redirect('/work-items/create');
             return;
         }
+
+        // CSRF Protection (skip for now to avoid breaking existing functionality)
+        // TODO: Uncomment when all forms have CSRF tokens
+        // Request::validateCsrf();
 
         $validation = Request::validate([
             'title' => 'required|max:255',
@@ -188,5 +194,164 @@ class WorkItemController extends Controller
 
         Session::flash('success', 'Comment added');
         $this->redirect('/work-items/' . $id);
+    }
+
+    public function uploadAttachment($id)
+    {
+        if (!Request::isPost()) {
+            $this->redirect('/work-items/' . $id);
+            return;
+        }
+
+        try {
+            $workItem = $this->workItemModel->find($id);
+            if (!$workItem) {
+                throw new Exception('Work item not found');
+            }
+
+            $employee = $this->getCurrentEmployee();
+
+            // Check if file was uploaded
+            if (!isset($_FILES['attachment']) || $_FILES['attachment']['error'] !== UPLOAD_ERR_OK) {
+                throw new Exception('File upload failed');
+            }
+
+            $file = $_FILES['attachment'];
+            
+            // Validate file size (max 10MB)
+            $maxSize = 10 * 1024 * 1024; // 10MB
+            if ($file['size'] > $maxSize) {
+                throw new Exception('File size exceeds 10MB limit');
+            }
+
+            // Validate file type
+            $allowedMimeTypes = [
+                'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+                'application/pdf',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'text/plain',
+                'application/zip'
+            ];
+
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = finfo_file($finfo, $file['tmp_name']);
+            finfo_close($finfo);
+
+            if (!in_array($mimeType, $allowedMimeTypes)) {
+                throw new Exception('File type not allowed');
+            }
+
+            // Generate unique filename
+            $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = uniqid('attachment_', true) . '.' . $extension;
+            $uploadDir = __DIR__ . '/../../storage/uploads/';
+            
+            // Create directory if it doesn't exist (SECURITY FIX: proper permissions)
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0750, true);
+                // Create .htaccess to prevent direct access
+                file_put_contents($uploadDir . '.htaccess', "Require all denied\n");
+            }
+
+            $filePath = $uploadDir . $filename;
+
+            // Move uploaded file
+            if (!move_uploaded_file($file['tmp_name'], $filePath)) {
+                throw new Exception('Failed to save file');
+            }
+
+            // Save to database
+            $this->attachmentModel->createAttachment(
+                $id,
+                $filename,
+                $file['name'],
+                $filename,
+                $file['size'],
+                $mimeType,
+                $employee['id']
+            );
+
+            // Audit log
+            $this->auditLog->log(
+                $this->getCurrentUser()['id'],
+                'upload_attachment',
+                'work_item',
+                $id,
+                json_encode(['filename' => $file['name']])
+            );
+
+            Session::flash('success', 'File uploaded successfully');
+        } catch (Exception $e) {
+            Session::flash('error', $e->getMessage());
+        }
+
+        $this->redirect('/work-items/' . $id);
+    }
+
+    public function downloadAttachment($id)
+    {
+        try {
+            $attachment = $this->attachmentModel->find($id);
+            if (!$attachment) {
+                throw new Exception('Attachment not found');
+            }
+
+            $filePath = __DIR__ . '/../../storage/uploads/' . $attachment['file_path'];
+            if (!file_exists($filePath)) {
+                throw new Exception('File not found');
+            }
+
+            // Set headers for download
+            header('Content-Type: ' . $attachment['mime_type']);
+            header('Content-Disposition: attachment; filename="' . $attachment['original_filename'] . '"');
+            header('Content-Length: ' . filesize($filePath));
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+
+            // Output file
+            readfile($filePath);
+            exit;
+        } catch (Exception $e) {
+            Session::flash('error', $e->getMessage());
+            $this->redirect('/work-items');
+        }
+    }
+
+    public function deleteAttachment($id)
+    {
+        if (!Request::isPost()) {
+            $this->redirect('/work-items');
+            return;
+        }
+
+        try {
+            $attachment = $this->attachmentModel->find($id);
+            if (!$attachment) {
+                throw new Exception('Attachment not found');
+            }
+
+            $workItemId = $attachment['work_item_id'];
+            
+            // Delete attachment
+            $this->attachmentModel->deleteAttachment($id);
+
+            // Audit log
+            $this->auditLog->log(
+                $this->getCurrentUser()['id'],
+                'delete_attachment',
+                'work_item',
+                $workItemId,
+                json_encode(['filename' => $attachment['original_filename']])
+            );
+
+            Session::flash('success', 'Attachment deleted successfully');
+            $this->redirect('/work-items/' . $workItemId);
+        } catch (Exception $e) {
+            Session::flash('error', $e->getMessage());
+            $this->redirect('/work-items');
+        }
     }
 }

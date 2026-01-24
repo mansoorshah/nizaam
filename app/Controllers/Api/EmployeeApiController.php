@@ -53,6 +53,9 @@ class EmployeeApiController extends ApiController
         }
 
         try {
+            // Start transaction
+            $this->db->beginTransaction();
+            
             // Create user
             $userId = $this->db->insert('users', [
                 'email' => $data['email'],
@@ -73,9 +76,18 @@ class EmployeeApiController extends ApiController
                 'join_date' => $data['join_date']
             ]);
 
+            // Initialize leave balances (CRITICAL FIX)
+            $leaveService = new LeaveService();
+            $leaveService->initializeLeaveBalance($employeeId, $data['designation']);
+            
+            // Commit transaction
+            $this->db->commit();
+
             $employee = $this->employeeModel->getWithUser($employeeId);
             $this->successResponse($employee, 'Employee created successfully');
         } catch (Exception $e) {
+            // Rollback on error
+            $this->db->rollback();
             $this->errorResponse($e->getMessage(), 500);
         }
     }

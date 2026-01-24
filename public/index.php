@@ -26,6 +26,7 @@ require_once __DIR__ . '/../app/Models/Project.php';
 require_once __DIR__ . '/../app/Models/Notification.php';
 require_once __DIR__ . '/../app/Models/AuditLog.php';
 require_once __DIR__ . '/../app/Models/LeaveType.php';
+require_once __DIR__ . '/../app/Models/Attachment.php';
 
 // Autoload services
 require_once __DIR__ . '/../app/Services/WorkflowService.php';

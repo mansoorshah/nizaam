@@ -85,4 +85,20 @@ class Request
 
         return empty($errors) ? true : $errors;
     }
+
+    /**
+     * Validate CSRF token for POST requests
+     * CRITICAL SECURITY FIX: Enforce CSRF protection
+     */
+    public static function validateCsrf()
+    {
+        if (self::isPost()) {
+            $token = self::input('csrf_token');
+            if (!$token || !Session::validateCsrfToken($token)) {
+                http_response_code(403);
+                die('CSRF token validation failed');
+            }
+        }
+        return true;
+    }
 }

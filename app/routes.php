@@ -30,6 +30,9 @@ $router->post('/work-items/create', [WorkItemController::class, 'store'], [AuthM
 $router->get('/work-items/{id}', [WorkItemController::class, 'show'], [AuthMiddleware::class]);
 $router->post('/work-items/{id}/status', [WorkItemController::class, 'updateStatus'], [AuthMiddleware::class]);
 $router->post('/work-items/{id}/comment', [WorkItemController::class, 'addComment'], [AuthMiddleware::class]);
+$router->post('/work-items/{id}/attachment', [WorkItemController::class, 'uploadAttachment'], [AuthMiddleware::class]);
+$router->get('/attachments/{id}/download', [WorkItemController::class, 'downloadAttachment'], [AuthMiddleware::class]);
+$router->post('/attachments/{id}/delete', [WorkItemController::class, 'deleteAttachment'], [AuthMiddleware::class]);
 
 // Project routes
 $router->get('/projects', [ProjectController::class, 'index'], [AuthMiddleware::class]);
@@ -42,6 +45,7 @@ $router->post('/projects/{id}/members', [ProjectController::class, 'addMember'],
 
 // Leave routes
 $router->get('/leaves', [LeaveController::class, 'index'], [AuthMiddleware::class]);
+$router->get('/leaves/calendar', [LeaveController::class, 'calendar'], [AuthMiddleware::class]);
 $router->get('/leaves/request', [LeaveController::class, 'create'], [AuthMiddleware::class]);
 $router->post('/leaves/request', [LeaveController::class, 'store'], [AuthMiddleware::class]);
 $router->get('/leaves/{id}', [LeaveController::class, 'show'], [AuthMiddleware::class]);
@@ -53,6 +57,9 @@ $router->post('/notifications/read-all', [NotificationController::class, 'markAl
 
 // Admin routes
 $router->get('/reports', [ReportController::class, 'index'], [AdminMiddleware::class]);
+$router->get('/reports/export/work-items', [ReportController::class, 'exportWorkItems'], [AdminMiddleware::class]);
+$router->get('/reports/export/workload', [ReportController::class, 'exportEmployeeWorkload'], [AdminMiddleware::class]);
+$router->get('/reports/export/leaves', [ReportController::class, 'exportLeaveUsage'], [AdminMiddleware::class]);
 $router->get('/audit', [AuditController::class, 'index'], [AdminMiddleware::class]);
 
 // Expense routes
@@ -60,8 +67,11 @@ $router->get('/expenses/create', [ExpenseController::class, 'create'], [AuthMidd
 $router->post('/expenses/store', [ExpenseController::class, 'store'], [AuthMiddleware::class]);
 
 // Timesheet routes
+$router->get('/timesheets', [TimesheetController::class, 'index'], [AuthMiddleware::class]);
 $router->get('/timesheets/create', [TimesheetController::class, 'create'], [AuthMiddleware::class]);
 $router->post('/timesheets/create', [TimesheetController::class, 'store'], [AuthMiddleware::class]);
+$router->get('/timesheets/{id}', [TimesheetController::class, 'show'], [AuthMiddleware::class]);
+$router->post('/timesheets/store', [TimesheetController::class, 'store'], [AuthMiddleware::class]);
 
 // ============================================
 // REST API ROUTES

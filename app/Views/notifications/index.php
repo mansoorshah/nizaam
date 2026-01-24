@@ -1,14 +1,7 @@
 <?php ob_start(); ?>
 
 <!-- Page Header -->
-<div class="d-flex justify-content-between align-items-center mb-4" data-aos="fade-down">
-    <div>
-        <h1 class="h3 mb-1">
-            <i class="bi bi-bell-fill text-primary"></i>
-            Notifications
-        </h1>
-        <p class="text-muted mb-0">Stay updated with your latest activities</p>
-    </div>
+<div class="d-flex justify-content-end align-items-center mb-4" data-aos="fade-down">
     <div>
         <?php if ($unreadCount > 0): ?>
         <form action="<?= $this->getBaseUrl() ?>/notifications/read-all" method="POST" style="display: inline;">

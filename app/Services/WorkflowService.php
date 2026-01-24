@@ -95,6 +95,23 @@ class WorkflowService
         $success = $this->workItemModel->updateStatus($workItemId, $toStatusId, $employeeId, $comment);
 
         if ($success) {
+            // Check if this is a leave request being approved (reaching final approved status)
+            if ($workItem['type'] === 'leave_request') {
+                $toStatus = $this->workflowModel->getStatusById($toStatusId);
+                
+                // If transitioning to a final "Approved" status, deduct leave balance
+                if ($toStatus && $toStatus['is_final'] == 1 && $toStatus['status_name'] === 'Approved') {
+                    require_once __DIR__ . '/LeaveService.php';
+                    $leaveService = new LeaveService();
+                    try {
+                        $leaveService->approveLeaveRequest($workItemId, $employeeId);
+                    } catch (Exception $e) {
+                        // Log error but don't fail the status transition
+                        error_log("Failed to deduct leave balance for work item {$workItemId}: " . $e->getMessage());
+                    }
+                }
+            }
+            
             // Notify creator and assignee
             if ($workItem['assigned_to'] && $workItem['assigned_to'] != $employeeId) {
                 $this->notificationModel->createNotification(

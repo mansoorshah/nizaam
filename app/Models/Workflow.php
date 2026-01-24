@@ -26,6 +26,12 @@ class Workflow extends Model
         return $this->db->fetchOne($sql, [$workflowId]);
     }
 
+    public function getStatusById($statusId)
+    {
+        $sql = "SELECT * FROM workflow_statuses WHERE id = ? LIMIT 1";
+        return $this->db->fetchOne($sql, [$statusId]);
+    }
+
     public function getTransitions($workflowId, $fromStatusId = null)
     {
         $sql = "SELECT wt.*, 

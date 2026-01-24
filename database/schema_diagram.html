@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nizaam Database Schema - Interactive Diagram</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .controls button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: #3b82f6;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .controls button:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .controls button.fullscreen-btn {
+            background: #10b981;
+        }
+        
+        .controls button.fullscreen-btn:hover {
+            background: #059669;
+        }
+        
+        .fullscreen-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            background: white;
+        }
+        
+        .fullscreen-mode .header,
+        .fullscreen-mode .controls {
+            position: relative;
+            z-index: 10000;
+        }
+        
+        .fullscreen-mode .svg-container {
+            height: calc(100vh - 200px);
+        }
+        
+        .controls .info {
+            padding: 8px 15px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #3b82f6;
+            color: #1e40af;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .svg-container {
+            width: 100%;
+            height: calc(100vh - 250px);
+            min-height: 600px;
+            overflow: auto;
+            background: #fafafa;
+            padding: 20px;
+        }
+        
+        svg {
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Table styles */
+        .table-group {
+            cursor: move;
+        }
+        
+        .table-rect {
+            fill: white;
+            stroke: #3b82f6;
+            stroke-width: 2;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+            transition: all 0.3s;
+        }
+        
+        .table-group:hover .table-rect {
+            fill: #eff6ff;
+            stroke: #2563eb;
+            stroke-width: 3;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
+        }
+        
+        .table-header {
+            fill: linear-gradient(135deg, #1e3a8a, #2563eb);
+        }
+        
+        .table-name {
+            fill: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-anchor: middle;
+        }
+        
+        .field-text {
+            fill: #374151;
+            font-size: 12px;
+        }
+        
+        .field-type {
+            fill: #6b7280;
+            font-size: 11px;
+        }
+        
+        .pk-badge {
+            fill: #f59e0b;
+            stroke: #d97706;
+            stroke-width: 1;
+        }
+        
+        .fk-badge {
+            fill: #3b82f6;
+            stroke: #2563eb;
+            stroke-width: 1;
+        }
+        
+        .badge-text {
+            fill: white;
+            font-size: 9px;
+            font-weight: bold;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+        
+        /* Relationship lines */
+        .relationship-line {
+            stroke: #6366f1;
+            stroke-width: 2;
+            fill: none;
+            marker-end: url(#arrowhead);
+            opacity: 0.6;
+            transition: all 0.3s;
+        }
+        
+        .relationship-line:hover {
+            stroke: #4f46e5;
+            stroke-width: 3;
+            opacity: 1;
+        }
+        
+        .legend {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: 2px solid #3b82f6;
+        }
+        
+        .legend h3 {
+            color: #1e40af;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 15px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗄️ Nizaam Database Schema</h1>
+            <p>Interactive Entity-Relationship Diagram</p>
+        </div>
+        
+        <div class="controls">
+            <button onclick="zoomIn()">🔍 Zoom In</button>
+            <button onclick="zoomOut()">🔍 Zoom Out</button>
+            <button onclick="resetZoom()">↺ Reset</button>
+            <button class="fullscreen-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+            <button onclick="downloadSVG()">💾 Download SVG</button>
+            <div class="info">18 Tables • 50+ Relationships</div>
+        </div>
+        
+        <div class="svg-container" id="svgContainer">
+            <svg id="schema" width="2150" height="1650" viewBox="0 0 2150 1650" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                        <polygon points="0 0, 10 3, 0 6" fill="#6366f1" />
+                    </marker>
+                    <linearGradient id="headerGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#1e40af;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <!-- Core Authentication & User Management -->
+                <g class="table-group" transform="translate(50, 50)">
+                    <rect class="table-rect" width="280" height="220" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">users</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="170" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="182.5" y="65">PK</text>
+                    <text class="field-type" x="200" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">📧 email</text><text class="field-type" x="200" y="85">varchar(255)</text>
+                    <text class="field-text" x="15" y="105">🔒 password</text><text class="field-type" x="200" y="105">varchar(255)</text>
+                    <text class="field-text" x="15" y="125">👤 full_name</text><text class="field-type" x="200" y="125">varchar(255)</text>
+                    <text class="field-text" x="15" y="145">🎭 role</text><text class="field-type" x="200" y="145">enum</text>
+                    <text class="field-text" x="15" y="165">📅 created_at</text><text class="field-type" x="200" y="165">timestamp</text>
+                    <text class="field-text" x="15" y="185">📅 updated_at</text><text class="field-type" x="200" y="185">timestamp</text>
+                </g>
+                
+                <g class="table-group" transform="translate(400, 50)">
+                    <rect class="table-rect" width="280" height="320" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">employees</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="110" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="65">PK</text>
+                    <text class="field-type" x="140" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">🔗 user_id</text>
+                    <rect class="fk-badge" x="110" y="77" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="85">FK</text>
+                    <text class="field-type" x="140" y="85">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="105">🆔 employee_id</text><text class="field-type" x="140" y="105">varchar(50)</text>
+                    <text class="field-text" x="15" y="125">👤 full_name</text><text class="field-type" x="140" y="125">varchar(255)</text>
+                    <text class="field-text" x="15" y="145">📧 email</text><text class="field-type" x="140" y="145">varchar(255)</text>
+                    <text class="field-text" x="15" y="165">💼 designation</text><text class="field-type" x="140" y="165">varchar(100)</text>
+                    <text class="field-text" x="15" y="185">🏢 department</text><text class="field-type" x="140" y="185">varchar(100)</text>
+                    <text class="field-text" x="15" y="205">📱 phone</text><text class="field-type" x="140" y="205">varchar(20)</text>
+                    <text class="field-text" x="15" y="225">✅ status</text><text class="field-type" x="140" y="225">enum</text>
+                    <text class="field-text" x="15" y="245">📅 join_date</text><text class="field-type" x="140" y="245">date</text>
+                    <text class="field-text" x="15" y="265">📅 created_at</text><text class="field-type" x="140" y="265">timestamp</text>
+                    <text class="field-text" x="15" y="285">📅 updated_at</text><text class="field-type" x="140" y="285">timestamp</text>
+                </g>
+                
+                <!-- API & Session Management -->
+                <g class="table-group" transform="translate(50, 320)">
+                    <rect class="table-rect" width="280" height="180" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">api_tokens</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="170" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="182.5" y="65">PK</text>
+                    <text class="field-type" x="200" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">🔗 user_id</text>
+                    <rect class="fk-badge" x="170" y="77" width="25" height="16" rx="3"/><text class="badge-text" x="182.5" y="85">FK</text>
+                    <text class="field-type" x="200" y="85">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="105">🎫 token</text><text class="field-type" x="200" y="105">varchar(255)</text>
+                    <text class="field-text" x="15" y="125">⏰ expires_at</text><text class="field-type" x="200" y="125">datetime</text>
+                    <text class="field-text" x="15" y="145">📅 created_at</text><text class="field-type" x="200" y="145">timestamp</text>
+                </g>
+                
+                <g class="table-group" transform="translate(400, 420)">
+                    <rect class="table-rect" width="280" height="180" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">sessions</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="110" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="65">PK</text>
+                    <text class="field-type" x="140" y="65">varchar(128)</text>
+                    <text class="field-text" x="15" y="85">💾 data</text><text class="field-type" x="140" y="85">text</text>
+                    <text class="field-text" x="15" y="105">⏰ last_activity</text><text class="field-type" x="140" y="105">int(10)</text>
+                    <text class="field-text" x="15" y="125">🌐 ip_address</text><text class="field-type" x="140" y="125">varchar(45)</text>
+                    <text class="field-text" x="15" y="145">🖥️ user_agent</text><text class="field-type" x="140" y="145">text</text>
+                </g>
+                
+                <!-- Projects Module -->
+                <g class="table-group" transform="translate(750, 50)">
+                    <rect class="table-rect" width="280" height="280" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">projects</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="110" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="65">PK</text>
+                    <text class="field-type" x="140" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">📋 name</text><text class="field-type" x="140" y="85">varchar(255)</text>
+                    <text class="field-text" x="15" y="105">📝 description</text><text class="field-type" x="140" y="105">longtext</text>
+                    <text class="field-text" x="15" y="125">🔗 owner_id</text>
+                    <rect class="fk-badge" x="110" y="117" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="125">FK</text>
+                    <text class="field-type" x="140" y="125">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="145">✅ status</text><text class="field-type" x="140" y="145">enum</text>
+                    <text class="field-text" x="15" y="165">📅 start_date</text><text class="field-type" x="140" y="165">date</text>
+                    <text class="field-text" x="15" y="185">📅 end_date</text><text class="field-type" x="140" y="185">date</text>
+                    <text class="field-text" x="15" y="205">💰 budget</text><text class="field-type" x="140" y="205">decimal(15,2)</text>
+                    <text class="field-text" x="15" y="225">📅 created_at</text><text class="field-type" x="140" y="225">timestamp</text>
+                    <text class="field-text" x="15" y="245">📅 updated_at</text><text class="field-type" x="140" y="245">timestamp</text>
+                </g>
+                
+                <g class="table-group" transform="translate(750, 380)">
+                    <rect class="table-rect" width="280" height="160" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">project_members</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="170" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="182.5" y="65">PK</text>
+                    <text class="field-type" x="200" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">🔗 project_id</text>
+                    <rect class="fk-badge" x="170" y="77" width="25" height="16" rx="3"/><text class="badge-text" x="182.5" y="85">FK</text>
+                    <text class="field-type" x="200" y="85">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="105">🔗 employee_id</text>
+                    <rect class="fk-badge" x="170" y="97" width="25" height="16" rx="3"/><text class="badge-text" x="182.5" y="105">FK</text>
+                    <text class="field-type" x="200" y="105">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="125">📅 assigned_at</text><text class="field-type" x="200" y="125">timestamp</text>
+                </g>
+                
+                <!-- Work Items & Workflow -->
+                <g class="table-group" transform="translate(1100, 50)">
+                    <rect class="table-rect" width="300" height="400" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="300" height="40" rx="8"/>
+                    <text class="table-name" x="150" y="25">work_items</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="130" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="142.5" y="65">PK</text>
+                    <text class="field-type" x="160" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">🔗 workflow_id</text>
+                    <rect class="fk-badge" x="130" y="77" width="25" height="16" rx="3"/><text class="badge-text" x="142.5" y="85">FK</text>
+                    <text class="field-type" x="160" y="85">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="105">🔗 project_id</text>
+                    <rect class="fk-badge" x="130" y="97" width="25" height="16" rx="3"/><text class="badge-text" x="142.5" y="105">FK</text>
+                    <text class="field-type" x="160" y="105">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="125">📋 title</text><text class="field-type" x="160" y="125">varchar(500)</text>
+                    <text class="field-text" x="15" y="145">📝 description</text><text class="field-type" x="160" y="145">longtext</text>
+                    <text class="field-text" x="15" y="165">🎯 type</text><text class="field-type" x="160" y="165">enum</text>
+                    <text class="field-text" x="15" y="185">⚠️ priority</text><text class="field-type" x="160" y="185">enum</text>
+                    <text class="field-text" x="15" y="205">✅ current_status_id</text><text class="field-type" x="160" y="205">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="225">🔗 assigned_to</text><text class="field-type" x="160" y="225">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="245">🔗 created_by</text><text class="field-type" x="160" y="245">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="265">📅 due_date</text><text class="field-type" x="160" y="265">date</text>
+                    <text class="field-text" x="15" y="285">📅 completed_at</text><text class="field-type" x="160" y="285">datetime</text>
+                    <text class="field-text" x="15" y="305">⏱️ estimated_hours</text><text class="field-type" x="160" y="305">decimal(5,2)</text>
+                    <text class="field-text" x="15" y="325">⏱️ actual_hours</text><text class="field-type" x="160" y="325">decimal(5,2)</text>
+                    <text class="field-text" x="15" y="345">📅 created_at</text><text class="field-type" x="160" y="345">timestamp</text>
+                    <text class="field-text" x="15" y="365">📅 updated_at</text><text class="field-type" x="160" y="365">timestamp</text>
+                </g>
+                
+                <g class="table-group" transform="translate(1460, 50)">
+                    <rect class="table-rect" width="280" height="200" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">workflows</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="110" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="65">PK</text>
+                    <text class="field-type" x="140" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">📋 name</text><text class="field-type" x="140" y="85">varchar(255)</text>
+                    <text class="field-text" x="15" y="105">📝 description</text><text class="field-type" x="140" y="105">text</text>
+                    <text class="field-text" x="15" y="125">🎯 type</text><text class="field-type" x="200" y="125">varchar(50)</text>
+                    <text class="field-text" x="15" y="145">✅ is_default</text><text class="field-type" x="200" y="145">tinyint(1)</text>
+                    <text class="field-text" x="15" y="165">📅 created_at</text><text class="field-type" x="200" y="165">timestamp</text>
+                    <rect class="pk-badge" x="245" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="257.5" y="65">PK</text>
+                </g>
+                
+                <g class="table-group" transform="translate(1460, 300)">
+                    <rect class="table-rect" width="280" height="220" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">workflow_statuses</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="110" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="65">PK</text>
+                    <text class="field-type" x="140" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">🔗 workflow_id</text>
+                    <rect class="fk-badge" x="110" y="77" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="85">FK</text>
+                    <text class="field-type" x="140" y="85">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="105">📋 name</text><text class="field-type" x="140" y="105">varchar(100)</text>
+                    <text class="field-text" x="15" y="125">🎨 color</text><text class="field-type" x="140" y="125">varchar(7)</text>
+                    <text class="field-text" x="15" y="145">🔢 order_num</text><text class="field-type" x="140" y="145">int(11)</text>
+                    <text class="field-text" x="15" y="165">✅ is_initial</text><text class="field-type" x="140" y="165">tinyint(1)</text>
+                    <text class="field-text" x="15" y="185">🏁 is_final</text><text class="field-type" x="140" y="185">tinyint(1)</text>
+                </g>
+                
+                <g class="table-group" transform="translate(1800, 300)">
+                    <rect class="table-rect" width="280" height="180" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">workflow_transitions</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="110" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="65">PK</text>
+                    <text class="field-type" x="140" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">🔗 workflow_id</text>
+                    <rect class="fk-badge" x="110" y="77" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="85">FK</text>
+                    <text class="field-type" x="140" y="85">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="105">➡️ from_status_id</text><text class="field-type" x="140" y="105">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="125">➡️ to_status_id</text><text class="field-type" x="140" y="125">int(10) UNSIGNED</text>
+                </g>
+                
+                <!-- Work Item Related -->
+                <g class="table-group" transform="translate(1100, 500)">
+                    <rect class="table-rect" width="280" height="160" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">comments</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="110" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="65">PK</text>
+                    <text class="field-type" x="140" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">🔗 work_item_id</text>
+                    <rect class="fk-badge" x="110" y="77" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="85">FK</text>
+                    <text class="field-type" x="140" y="85">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="105">🔗 employee_id</text><text class="field-type" x="140" y="105">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="125">💬 comment</text><text class="field-type" x="140" y="125">longtext</text>
+                </g>
+                
+                <g class="table-group" transform="translate(1100, 710)">
+                    <rect class="table-rect" width="280" height="240" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">attachments</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="110" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="65">PK</text>
+                    <text class="field-type" x="140" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">🔗 work_item_id</text>
+                    <rect class="fk-badge" x="110" y="77" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="85">FK</text>
+                    <text class="field-type" x="140" y="85">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="105">📁 filename</text><text class="field-type" x="140" y="105">varchar(255)</text>
+                    <text class="field-text" x="15" y="125">📁 original_filename</text><text class="field-type" x="140" y="125">varchar(255)</text>
+                    <text class="field-text" x="15" y="145">📂 file_path</text><text class="field-type" x="140" y="145">varchar(500)</text>
+                    <text class="field-text" x="15" y="165">📏 file_size</text><text class="field-type" x="140" y="165">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="185">🔗 uploaded_by</text><text class="field-type" x="140" y="185">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="205">📅 created_at</text><text class="field-type" x="140" y="205">timestamp</text>
+                </g>
+                
+                <g class="table-group" transform="translate(1460, 550)">
+                    <rect class="table-rect" width="300" height="260" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="300" height="40" rx="8"/>
+                    <text class="table-name" x="150" y="25">work_item_history</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="130" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="142.5" y="65">PK</text>
+                    <text class="field-type" x="160" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">🔗 work_item_id</text>
+                    <rect class="fk-badge" x="130" y="77" width="25" height="16" rx="3"/><text class="badge-text" x="142.5" y="85">FK</text>
+                    <text class="field-type" x="160" y="85">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="105">➡️ from_status_id</text><text class="field-type" x="160" y="105">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="125">➡️ to_status_id</text><text class="field-type" x="160" y="125">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="145">🔗 changed_by</text><text class="field-type" x="160" y="145">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="165">💬 comment</text><text class="field-type" x="160" y="165">text</text>
+                    <text class="field-text" x="15" y="185">📅 created_at</text><text class="field-type" x="160" y="185">timestamp</text>
+                </g>
+                
+                <!-- Leave Management -->
+                <g class="table-group" transform="translate(50, 1000)">
+                    <rect class="table-rect" width="280" height="200" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">leave_types</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="110" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="65">PK</text>
+                    <text class="field-type" x="140" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">📋 name</text><text class="field-type" x="140" y="85">varchar(100)</text>
+                    <text class="field-text" x="15" y="105">🔤 code</text><text class="field-type" x="140" y="105">varchar(20)</text>
+                    <text class="field-text" x="15" y="125">📝 description</text><text class="field-type" x="140" y="125">longtext</text>
+                    <text class="field-text" x="15" y="145">💰 is_paid</text><text class="field-type" x="140" y="145">tinyint(1)</text>
+                    <text class="field-text" x="15" y="165">✅ requires_approval</text><text class="field-type" x="140" y="165">tinyint(1)</text>
+                </g>
+                
+                <g class="table-group" transform="translate(390, 1000)">
+                    <rect class="table-rect" width="280" height="180" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">leave_quotas</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="110" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="65">PK</text>
+                    <text class="field-type" x="140" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">💼 designation</text><text class="field-type" x="140" y="85">varchar(100)</text>
+                    <text class="field-text" x="15" y="105">🔗 leave_type_id</text>
+                    <rect class="fk-badge" x="110" y="97" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="105">FK</text>
+                    <text class="field-type" x="140" y="105">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="125">📊 annual_quota</text><text class="field-type" x="140" y="125">int(11)</text>
+                    <text class="field-text" x="15" y="145">📅 created_at</text><text class="field-type" x="140" y="145">timestamp</text>
+                </g>
+                
+                <g class="table-group" transform="translate(730, 1000)">
+                    <rect class="table-rect" width="280" height="220" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="280" height="40" rx="8"/>
+                    <text class="table-name" x="140" y="25">leave_balances</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="110" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="65">PK</text>
+                    <text class="field-type" x="140" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">🔗 employee_id</text>
+                    <rect class="fk-badge" x="110" y="77" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="85">FK</text>
+                    <text class="field-type" x="140" y="85">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="105">🔗 leave_type_id</text>
+                    <rect class="fk-badge" x="110" y="97" width="25" height="16" rx="3"/><text class="badge-text" x="122.5" y="105">FK</text>
+                    <text class="field-type" x="140" y="105">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="125">📅 year</text><text class="field-type" x="140" y="125">int(11)</text>
+                    <text class="field-text" x="15" y="145">📊 quota</text><text class="field-type" x="140" y="145">int(11)</text>
+                    <text class="field-text" x="15" y="165">📉 used</text><text class="field-type" x="140" y="165">int(11)</text>
+                    <text class="field-text" x="15" y="185">📈 remaining</text><text class="field-type" x="140" y="185">int(11)</text>
+                </g>
+                
+                <!-- Notifications & Audit -->
+                <g class="table-group" transform="translate(50, 1300)">
+                    <rect class="table-rect" width="300" height="260" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="300" height="40" rx="8"/>
+                    <text class="table-name" x="150" y="25">notifications</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="130" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="142.5" y="65">PK</text>
+                    <text class="field-type" x="160" y="65">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">🔗 employee_id</text>
+                    <rect class="fk-badge" x="130" y="77" width="25" height="16" rx="3"/><text class="badge-text" x="142.5" y="85">FK</text>
+                    <text class="field-type" x="160" y="85">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="105">📋 title</text><text class="field-type" x="160" y="105">varchar(255)</text>
+                    <text class="field-text" x="15" y="125">💬 message</text><text class="field-type" x="160" y="125">text</text>
+                    <text class="field-text" x="15" y="145">🎯 type</text><text class="field-type" x="160" y="145">enum</text>
+                    <text class="field-text" x="15" y="165">🔗 related_type</text><text class="field-type" x="160" y="165">varchar(50)</text>
+                    <text class="field-text" x="15" y="185">🔗 related_id</text><text class="field-type" x="160" y="185">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="205">✅ is_read</text><text class="field-type" x="160" y="205">tinyint(1)</text>
+                    <text class="field-text" x="15" y="225">📅 created_at</text><text class="field-type" x="160" y="225">timestamp</text>
+                </g>
+                
+                <g class="table-group" transform="translate(410, 1300)">
+                    <rect class="table-rect" width="300" height="280" rx="8"/>
+                    <rect fill="url(#headerGradient)" width="300" height="40" rx="8"/>
+                    <text class="table-name" x="150" y="25">audit_log</text>
+                    <text class="field-text" x="15" y="65">🔑 id</text>
+                    <rect class="pk-badge" x="130" y="57" width="25" height="16" rx="3"/><text class="badge-text" x="142.5" y="65">PK</text>
+                    <text class="field-type" x="160" y="65">bigint(20) UNSIGNED</text>
+                    <text class="field-text" x="15" y="85">🔗 actor_id</text>
+                    <rect class="fk-badge" x="130" y="77" width="25" height="16" rx="3"/><text class="badge-text" x="142.5" y="85">FK</text>
+                    <text class="field-type" x="160" y="85">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="105">⚡ action</text><text class="field-type" x="160" y="105">varchar(100)</text>
+                    <text class="field-text" x="15" y="125">📦 entity_type</text><text class="field-type" x="160" y="125">varchar(50)</text>
+                    <text class="field-text" x="15" y="145">🔗 entity_id</text><text class="field-type" x="160" y="145">int(10) UNSIGNED</text>
+                    <text class="field-text" x="15" y="165">💾 metadata</text><text class="field-type" x="160" y="165">longtext</text>
+                    <text class="field-text" x="15" y="185">🌐 ip_address</text><text class="field-type" x="160" y="185">varchar(45)</text>
+                    <text class="field-text" x="15" y="205">🖥️ user_agent</text><text class="field-type" x="160" y="205">varchar(500)</text>
+                    <text class="field-text" x="15" y="225">📅 created_at</text><text class="field-type" x="160" y="225">timestamp</text>
+                </g>
+                
+                <!-- Relationship Lines -->
+                <!-- users -> employees -->
+                <path class="relationship-line" d="M 330,160 L 400,160"/>
+                
+                <!-- users -> api_tokens -->
+                <path class="relationship-line" d="M 190,270 L 190,320"/>
+                
+                <!-- employees -> projects (owner) -->
+                <path class="relationship-line" d="M 680,190 L 750,190"/>
+                
+                <!-- projects -> project_members -->
+                <path class="relationship-line" d="M 890,330 L 890,380"/>
+                
+                <!-- employees -> project_members -->
+                <path class="relationship-line" d="M 540,370 Q 640,420 750,460"/>
+                
+                <!-- projects -> work_items -->
+                <path class="relationship-line" d="M 1030,190 L 1100,220"/>
+                
+                <!-- workflows -> work_items -->
+                <path class="relationship-line" d="M 1460,160 L 1400,160"/>
+                
+                <!-- workflows -> workflow_statuses -->
+                <path class="relationship-line" d="M 1600,250 L 1600,300"/>
+                
+                <!-- workflows -> workflow_transitions -->
+                <path class="relationship-line" d="M 1740,300 Q 1940,250 1940,300"/>
+                
+                <!-- workflow_statuses -> work_items (current_status) -->
+                <path class="relationship-line" d="M 1460,410 Q 1380,340 1300,280"/>
+                
+                <!-- work_items -> comments -->
+                <path class="relationship-line" d="M 1250,450 L 1250,500"/>
+                
+                <!-- work_items -> attachments -->
+                <path class="relationship-line" d="M 1250,450 Q 1250,650 1250,710"/>
+                
+                <!-- work_items -> work_item_history -->
+                <path class="relationship-line" d="M 1400,320 Q 1550,400 1610,550"/>
+                
+                <!-- employees -> work_items (assigned_to) -->
+                <path class="relationship-line" d="M 680,240 Q 890,220 1100,240"/>
+                
+                <!-- employees -> notifications -->
+                <path class="relationship-line" d="M 540,370 Q 300,700 200,1300"/>
+                
+                <!-- employees -> audit_log (actor) -->
+                <path class="relationship-line" d="M 540,370 Q 460,850 560,1300"/>
+                
+                <!-- leave_types -> leave_quotas -->
+                <path class="relationship-line" d="M 330,1100 L 390,1100"/>
+                
+                <!-- leave_types -> leave_balances -->
+                <path class="relationship-line" d="M 330,1100 Q 530,1100 730,1110"/>
+                
+                <!-- employees -> leave_balances -->
+                <path class="relationship-line" d="M 540,370 Q 640,680 870,1000"/>
+            </svg>
+        </div>
+    </div>
+    
+    <div class="legend">
+        <h3>🔑 Legend</h3>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #f59e0b;"></div>
+            <span>Primary Key (PK)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #3b82f6;"></div>
+            <span>Foreign Key (FK)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: linear-gradient(135deg, #1e3a8a, #2563eb);"></div>
+            <span>Table Header</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #6366f1;"></div>
+            <span>Relationship Line</span>
+        </div>
+    </div>
+    
+    <script>
+        let scale = 1;
+        const container = document.getElementById('svgContainer');
+        const svg = document.getElementById('schema');
+        
+        function zoomIn() {
+            scale = Math.min(scale + 0.1, 2);
+            applyZoom();
+        }
+        
+        function zoomOut() {
+            scale = Math.max(scale - 0.1, 0.3);
+            applyZoom();
+        }
+        
+        function resetZoom() {
+            scale = 1;
+            applyZoom();
+            container.scrollTop = 0;
+            container.scrollLeft = 0;
+        }
+        
+        function applyZoom() {
+            svg.style.transform = `scale(${scale})`;
+            svg.style.transformOrigin = 'top left';
+        }
+        
+        function downloadSVG() {
+            // Clone the SVG to avoid modifying the displayed version
+            const svgClone = svg.cloneNode(true);
+            
+            // Remove transform to export at original scale
+            svgClone.style.transform = '';
+            
+            // Create a proper SVG document with XML declaration and namespace
+            const serializer = new XMLSerializer();
+            const svgString = serializer.serializeToString(svgClone);
+            
+            // Add XML declaration and ensure proper namespace
+            const fullSvg = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' + svgString;
+            
+            const blob = new Blob([fullSvg], {type: 'image/svg+xml;charset=utf-8'});
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'nizaam_database_schema.svg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+        
+        function toggleFullscreen() {
+            const container = document.querySelector('.container');
+            const btn = event.target;
+            
+            if (!document.fullscreenElement) {
+                container.requestFullscreen().then(() => {
+                    btn.textContent = '✕ Exit Fullscreen';
+                    container.classList.add('fullscreen-mode');
+                }).catch(err => {
+                    console.error('Error attempting to enable fullscreen:', err);
+                });
+            } else {
+                document.exitFullscreen().then(() => {
+                    btn.textContent = '⛶ Fullscreen';
+                    container.classList.remove('fullscreen-mode');
+                });
+            }
+        }
+        
+        // Listen for fullscreen changes (user pressing ESC)
+        document.addEventListener('fullscreenchange', () => {
+            const container = document.querySelector('.container');
+            const btn = document.querySelector('.fullscreen-btn');
+            if (!document.fullscreenElement) {
+                btn.textContent = '⛶ Fullscreen';
+                container.classList.remove('fullscreen-mode');
+            }
+        });
+        
+        // Make tables draggable (optional enhancement)
+        const tables = document.querySelectorAll('.table-group');
+        tables.forEach(table => {
+            table.style.cursor = 'grab';
+            table.addEventListener('mousedown', () => {
+                table.style.cursor = 'grabbing';
+            });
+            table.addEventListener('mouseup', () => {
+                table.style.cursor = 'grab';
+            });
+        });
+    </script>
+</body>
+</html>

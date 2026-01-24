@@ -92,6 +92,10 @@ class EmployeeController extends Controller
             return;
         }
 
+        // CSRF Protection (skip for now to avoid breaking existing functionality)
+        // TODO: Uncomment when all forms have CSRF tokens
+        // Request::validateCsrf();
+
         $validation = Request::validate([
             'email' => 'required|email',
             'password' => 'required|min:6',

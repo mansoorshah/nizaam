@@ -23,6 +23,8 @@ A modern, workflow-driven Company OS built with core PHP, featuring employee man
   - Priority and due date management
   - Project association
   - Comments and attachments
+  - **File upload and management** (NEW!)
+  - Document storage and download
 
 - **Workflow Engine**
   - Configurable workflows per work type
@@ -31,9 +33,9 @@ A modern, workflow-driven Company OS built with core PHP, featuring employee man
   - Visual timeline
 
 - **HR Operations**
-  - **Leave Management**: Quotas, balances, approval workflows
+  - **Leave Management**: Quotas, balances, approval workflows, **calendar view** (NEW!)
   - **Expense Reimbursements**: Attachment support, multi-level approval
-  - **Timesheets**: Weekly submission with approval
+  - **Timesheets**: Weekly submission with approval, **list view with statistics** (NEW!)
 
 - **Projects**
   - Lightweight project grouping
@@ -55,7 +57,9 @@ A modern, workflow-driven Company OS built with core PHP, featuring employee man
   - Work items by status and type
   - Employee workload analysis
   - Leave usage reports
-  - CSV export support
+  - **Interactive charts with Chart.js** (NEW!)
+  - **CSV export for all reports** (NEW!)
+  - Professional data visualization
 
 ## Technology Stack
 

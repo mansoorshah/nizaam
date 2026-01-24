@@ -24,19 +24,14 @@ if ($employee) {
 
 <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="<?= dirname($_SERVER['SCRIPT_NAME']) === '/' ? '' : dirname($_SERVER['SCRIPT_NAME']) ?>/timesheets">Timesheet Management</a></li>
+        <li class="breadcrumb-item"><a href="<?= dirname($_SERVER['SCRIPT_NAME']) === '/' ? '' : dirname($_SERVER['SCRIPT_NAME']) ?>/dashboard">Timesheet Management</a></li>
         <li class="breadcrumb-item active">Add Timesheet</li>
     </ol>
 </nav>
 
-<div class="card" data-aos="fade-up">
-    <div class="card-header">
-        <div>
-            <i class="bi bi-clock-history me-2"></i>
-            Add Timesheet
-        </div>
-    </div>
+<div class="card shadow-sm">
     <div class="card-body p-4">
+        <h4 class="mb-4">Add Timesheet</h4>
         
         <form method="POST" action="<?= dirname($_SERVER['SCRIPT_NAME']) === '/' ? '' : dirname($_SERVER['SCRIPT_NAME']) ?>/timesheets/store" id="timesheetForm">
             <input type="hidden" name="csrf_token" value="<?= Session::get('csrf_token') ?>">
@@ -71,8 +66,8 @@ if ($employee) {
 
             <!-- Timesheet Table -->
             <div class="table-responsive mb-4">
-                <table class="table table-hover align-middle" id="timesheetTable">
-                    <thead>
+                <table class="table table-bordered align-middle" id="timesheetTable">
+                    <thead class="table-light">
                         <tr>
                             <th style="width: 25%;">PROJECT INFO</th>
                             <th style="width: 15%;">ROLE</th>
@@ -135,7 +130,7 @@ if ($employee) {
                         </tr>
                     </tbody>
                     <tfoot>
-                        <tr class="fw-bold" style="background-color: rgba(59, 130, 246, 0.1);">
+                        <tr class="table-light fw-bold">
                             <td colspan="2" class="text-end">TOTAL</td>
                             <td class="text-center day-total" data-day="sunday">0</td>
                             <td class="text-center day-total" data-day="monday">0</td>
@@ -179,26 +174,16 @@ if ($employee) {
 
 <style>
 .table th {
-    background-color: rgba(59, 130, 246, 0.15);
+    background-color: #f8f9fa;
     font-weight: 600;
     font-size: 0.75rem;
-    color: var(--bs-body-color);
+    color: #6c757d;
     padding: 0.75rem 0.5rem;
-    border-color: rgba(59, 130, 246, 0.2);
 }
 
 .table td {
     padding: 0.5rem;
     vertical-align: middle;
-    border-color: rgba(59, 130, 246, 0.15);
-}
-
-.table tfoot tr {
-    border-top: 2px solid rgba(59, 130, 246, 0.3);
-}
-
-.table tbody tr:hover {
-    background-color: rgba(59, 130, 246, 0.08);
 }
 
 .hours-input {
@@ -223,7 +208,7 @@ if ($employee) {
 
 .day-total {
     font-weight: 600;
-    color: var(--bs-body-color);
+    color: #495057;
 }
 
 .remove-row {

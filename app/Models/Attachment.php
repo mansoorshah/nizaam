@@ -4,25 +4,25 @@ class Attachment extends Model
 {
     protected $table = 'attachments';
 
-    public function getForEntity($entityType, $entityId)
+    public function getForWorkItem($workItemId)
     {
         $sql = "SELECT a.*, e.full_name as uploader_name
                 FROM {$this->table} a
                 INNER JOIN employees e ON a.uploaded_by = e.id
-                WHERE a.entity_type = ? AND a.entity_id = ?
+                WHERE a.work_item_id = ?
                 ORDER BY a.created_at DESC";
-        return $this->db->fetchAll($sql, [$entityType, $entityId]);
+        return $this->db->fetchAll($sql, [$workItemId]);
     }
 
-    public function createAttachment($entityType, $entityId, $fileName, $filePath, $fileSize, $fileType, $uploadedBy)
+    public function createAttachment($workItemId, $filename, $originalFilename, $filePath, $fileSize, $mimeType, $uploadedBy)
     {
         return $this->create([
-            'entity_type' => $entityType,
-            'entity_id' => $entityId,
-            'file_name' => $fileName,
+            'work_item_id' => $workItemId,
+            'filename' => $filename,
+            'original_filename' => $originalFilename,
             'file_path' => $filePath,
             'file_size' => $fileSize,
-            'file_type' => $fileType,
+            'mime_type' => $mimeType,
             'uploaded_by' => $uploadedBy
         ]);
     }
@@ -32,7 +32,7 @@ class Attachment extends Model
         $attachment = $this->find($id);
         if ($attachment) {
             // Delete physical file
-            $fullPath = __DIR__ . '/../public/uploads/' . $attachment['file_path'];
+            $fullPath = __DIR__ . '/../../storage/uploads/' . $attachment['file_path'];
             if (file_exists($fullPath)) {
                 unlink($fullPath);
             }
@@ -42,17 +42,17 @@ class Attachment extends Model
         return false;
     }
 
-    public function getFileIcon($fileType)
+    public function getFileIcon($mimeType)
     {
-        if (strpos($fileType, 'image/') === 0) {
+        if (strpos($mimeType, 'image/') === 0) {
             return 'bi-file-image';
-        } elseif (strpos($fileType, 'pdf') !== false) {
+        } elseif (strpos($mimeType, 'pdf') !== false) {
             return 'bi-file-pdf';
-        } elseif (strpos($fileType, 'word') !== false || strpos($fileType, 'document') !== false) {
+        } elseif (strpos($mimeType, 'word') !== false || strpos($mimeType, 'document') !== false) {
             return 'bi-file-word';
-        } elseif (strpos($fileType, 'excel') !== false || strpos($fileType, 'spreadsheet') !== false) {
+        } elseif (strpos($mimeType, 'excel') !== false || strpos($mimeType, 'spreadsheet') !== false) {
             return 'bi-file-excel';
-        } elseif (strpos($fileType, 'zip') !== false || strpos($fileType, 'compressed') !== false) {
+        } elseif (strpos($mimeType, 'zip') !== false || strpos($mimeType, 'compressed') !== false) {
             return 'bi-file-zip';
         } else {
             return 'bi-file-earmark';

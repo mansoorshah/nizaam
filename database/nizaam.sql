@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 18, 2026 at 09:14 PM
+-- Generation Time: Jan 23, 2026 at 09:51 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -216,7 +216,24 @@ INSERT INTO `audit_log` (`id`, `actor_id`, `action`, `entity_type`, `entity_id`,
 (120, 1, 'create', 'work_item', 77, '{\"type\":\"expense\",\"title\":\"Expense: Office Supplies - $150\"}', '127.0.0.1', 'python-requests/2.32.5', '2026-01-18 19:58:33'),
 (121, 1, 'create', 'work_item', 78, '{\"type\":\"timesheet\",\"title\":\"Timesheet: Week ending 2026-01-31 (38 hours)\"}', '127.0.0.1', 'python-requests/2.32.5', '2026-01-18 19:58:33'),
 (122, 1, 'login', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 20:01:17'),
-(123, 1, 'update', 'project', 20, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 20:11:17');
+(123, 1, 'update', 'project', 20, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 20:11:17'),
+(124, 1, 'logout', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 20:27:16'),
+(125, 1, 'login', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 20:27:33'),
+(126, 1, 'login', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 20:52:42'),
+(127, 1, 'update', 'project', 25, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 20:57:11'),
+(128, 1, 'create', 'work_item', 79, '{\"type\":\"leave_request\",\"title\":\"A leave request for this project\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 21:07:11'),
+(129, 1, 'create', 'work_item', 80, '{\"type\":\"leave_request\",\"title\":\"A leave request for this project\"}', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 21:08:22'),
+(130, 1, 'login', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 21:15:26'),
+(131, 1, 'logout', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 21:15:37'),
+(132, 1, 'login', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 21:15:42'),
+(133, 1, 'login', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 21:21:07'),
+(134, 1, 'logout', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 21:21:14'),
+(135, 1, 'login', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 21:21:32'),
+(136, 1, 'login', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-18 21:31:36'),
+(137, 2, 'logout', 'user', 2, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-19 19:28:58'),
+(138, 1, 'login', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-19 19:29:03'),
+(139, 1, 'logout', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-20 10:43:20'),
+(140, 1, 'login', 'user', 1, NULL, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', '2026-01-20 10:43:25');
 
 -- --------------------------------------------------------
 
@@ -492,7 +509,9 @@ INSERT INTO `notifications` (`id`, `employee_id`, `title`, `message`, `type`, `r
 (14, 1, 'New Assignment', 'You have been assigned: API Test - New Task 2', 'assignment', 'work_item', 63, 1, '2026-01-18 19:57:33'),
 (15, 1, 'New Assignment', 'You have been assigned: API Test - New Task 2', 'assignment', 'work_item', 67, 1, '2026-01-18 19:57:33'),
 (16, 1, 'New Assignment', 'You have been assigned: Final API Test - Task', 'assignment', 'work_item', 71, 1, '2026-01-18 19:58:32'),
-(17, 1, 'New Assignment', 'You have been assigned: Final API Test - Task', 'assignment', 'work_item', 75, 1, '2026-01-18 19:58:32');
+(17, 1, 'New Assignment', 'You have been assigned: Final API Test - Task', 'assignment', 'work_item', 75, 1, '2026-01-18 19:58:32'),
+(18, 99, 'New Assignment', 'You have been assigned: A leave request for this project', 'assignment', 'work_item', 79, 0, '2026-01-18 21:07:11'),
+(19, 99, 'New Assignment', 'You have been assigned: A leave request for this project', 'assignment', 'work_item', 80, 0, '2026-01-18 21:08:22');
 
 -- --------------------------------------------------------
 
@@ -543,7 +562,7 @@ INSERT INTO `projects` (`id`, `name`, `description`, `owner_id`, `status`, `star
 (22, 'API Test Project', '<h2>Testing Project Creation</h2><p>This project is created via API for testing purposes.</p>', 1, 'active', '2026-01-20', '2026-12-31', NULL, '2026-01-18 19:57:33', '2026-01-18 19:57:33'),
 (23, 'API Test Project', '<h2>Testing Project Creation</h2><p>This project is created via API for testing purposes.</p>', 1, 'active', '2026-01-20', '2026-12-31', NULL, '2026-01-18 19:57:34', '2026-01-18 19:57:34'),
 (24, 'Final Test Project', '<h2>Final API Test</h2><p>Testing all project API endpoints.</p>', 1, 'active', '2026-01-20', '2026-12-31', NULL, '2026-01-18 19:58:32', '2026-01-18 19:58:32'),
-(25, 'Final Test Project', '<h2>Final API Test</h2><p>Testing all project API endpoints.</p>', 1, 'active', '2026-01-20', '2026-12-31', NULL, '2026-01-18 19:58:32', '2026-01-18 19:58:32');
+(25, 'Final Test Project', '<h2>Final API Test</h2><p>Testing all project API endpoints.</p><p>Waking up early gives you a quiet moment to breathe, reflect, and set the tone for the day. The soft light, cool air, and stillness can make even a busy life feel balanced and peaceful.</p><p class=\"ql-align-center\"><img src=\"https://m.media-amazon.com/images/I/71znZqQSxLL._AC_UF894%2C1000_QL80_.jpg\" alt=\"https://m.media-amazon.com/images/I/71znZqQSxLL._AC_UF894%2C1000_QL80_.jpg\" width=\"423\" style=\"\"></p><p class=\"ql-align-center\"><span class=\"ql-cursor\">﻿</span></p><p class=\"ql-align-center\"><img src=\"https://images.unsplash.com/photo-1602426973528-040a2abb486c?fm=jpg&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1vdW50YWluJTIwc3VucmlzZXxlbnwwfHwwfHx8MA%3D%3D&amp;ixlib=rb-4.1.0&amp;q=60&amp;w=3000\" alt=\"https://images.unsplash.com/photo-1602426973528-040a2abb486c?fm=jpg&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1vdW50YWluJTIwc3VucmlzZXxlbnwwfHwwfHx8MA%3D%3D&amp;ixlib=rb-4.1.0&amp;q=60&amp;w=3000\" width=\"441\" style=\"\"></p><p class=\"ql-align-center\"><br></p><p class=\"ql-align-center\"><img src=\"https://images.openai.com/thumbnails/url/2lvdKnicu5mVUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw50Tg1O9fHwNC328XFJ9_bz9imuqAjzS3dJCnIvLrTMMKvU9cp08zFzS63INEyMKM2vVCsGAHuZJow\" alt=\"https://cottagelife.com/wp-content/uploads/2019/12/3.-ddf381211a06-20190826_063956.jpg\" width=\"267\" style=\"\"></p><p>4</p><p>Sometimes, a few calm minutes in the morning are enough to reset your mindset and improve your focus for the rest of the day.</p>', 1, 'active', '2026-01-20', '2026-12-31', NULL, '2026-01-18 19:58:32', '2026-01-18 20:57:11');
 
 -- --------------------------------------------------------
 
@@ -648,7 +667,12 @@ INSERT INTO `project_members` (`id`, `project_id`, `employee_id`, `created_at`) 
 (211, 23, 1, '2026-01-18 19:58:32'),
 (213, 20, 104, '2026-01-18 20:11:34'),
 (214, 20, 64, '2026-01-18 20:11:39'),
-(215, 20, 62, '2026-01-18 20:11:47');
+(215, 20, 62, '2026-01-18 20:11:47'),
+(216, 25, 99, '2026-01-18 20:57:45'),
+(217, 25, 61, '2026-01-18 20:57:52'),
+(218, 25, 78, '2026-01-18 20:57:57'),
+(219, 25, 34, '2026-01-18 20:58:02'),
+(220, 25, 70, '2026-01-18 20:58:11');
 
 -- --------------------------------------------------------
 
@@ -687,7 +711,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password_hash`, `role`, `is_active`, `last_login`, `created_at`, `updated_at`) VALUES
-(1, 'admin@nizaam.com', '$2y$10$PhMjQXHxRytU8JDJrIaY3Oy02RQWJPdTytPXuehmzfoHZwKPnQfUS', 'admin', 1, '2026-01-19 01:01:17', '2026-01-17 21:52:04', '2026-01-18 20:01:17'),
+(1, 'admin@nizaam.com', '$2y$10$PhMjQXHxRytU8JDJrIaY3Oy02RQWJPdTytPXuehmzfoHZwKPnQfUS', 'admin', 1, '2026-01-20 15:43:25', '2026-01-17 21:52:04', '2026-01-20 10:43:25'),
 (2, 'john.smith@nizaam.com', '$2y$10$XGYybSfJF79O0xgJLbML3uaihL5hzYAVzJfXwx9Pcw6PS5nYbqJAS', 'user', 1, NULL, '2026-01-18 19:35:03', '2026-01-18 19:35:03'),
 (3, 'sarah.johnson@nizaam.com', '$2y$10$DwA6nletPi5sfwUhkFVdcuGvSsH1zmWo/VDBsIokdcRbxvAN.64j6', 'user', 1, NULL, '2026-01-18 19:35:03', '2026-01-18 19:35:03'),
 (4, 'michael.chen@nizaam.com', '$2y$10$saOb.j.FxZfN/P5tu5HiHesa9PAENyN3ekR1sbqr08YdbC/34WIn.', 'user', 1, NULL, '2026-01-18 19:35:03', '2026-01-18 19:35:03'),
@@ -1007,7 +1031,9 @@ INSERT INTO `work_items` (`id`, `title`, `description`, `type`, `created_by`, `a
 (75, 'Final API Test - Task', 'Comprehensive API testing', 'task', 1, 1, 1, 1, 'high', '2026-03-01', 23, NULL, '2026-01-18 19:58:32', '2026-01-18 19:58:32'),
 (76, 'Leave Request: 2026-03-01 to 2026-03-03', 'Final API Test - Leave request', 'leave_request', 1, NULL, 2, 6, 'medium', '2026-03-03', NULL, '{\"leave_type_id\":1,\"start_date\":\"2026-03-01\",\"end_date\":\"2026-03-03\"}', '2026-01-18 19:58:32', '2026-01-18 19:58:32'),
 (77, 'Expense: Office Supplies - $150', 'Final API Test - Office supplies purchase', 'expense', 1, NULL, 3, 11, 'medium', NULL, NULL, '{\"amount\":150,\"category\":\"Office Supplies\",\"date\":\"2026-01-19\"}', '2026-01-18 19:58:33', '2026-01-18 19:58:33'),
-(78, 'Timesheet: Week ending 2026-01-31 (38 hours)', 'Final API Test - Work week timesheet', 'timesheet', 1, NULL, 4, 16, 'medium', NULL, NULL, '{\"week_ending\":\"2026-01-31\",\"hours\":{\"Monday\":8,\"Tuesday\":7.5,\"Wednesday\":8,\"Thursday\":8,\"Friday\":6.5},\"total_hours\":38}', '2026-01-18 19:58:33', '2026-01-18 19:58:33');
+(78, 'Timesheet: Week ending 2026-01-31 (38 hours)', 'Final API Test - Work week timesheet', 'timesheet', 1, NULL, 4, 16, 'medium', NULL, NULL, '{\"week_ending\":\"2026-01-31\",\"hours\":{\"Monday\":8,\"Tuesday\":7.5,\"Wednesday\":8,\"Thursday\":8,\"Friday\":6.5},\"total_hours\":38}', '2026-01-18 19:58:33', '2026-01-18 19:58:33'),
+(79, 'A leave request for this project', '<p>Waking up early gives you a quiet moment to breathe, reflect, and set the tone for the day. The soft light, cool air, and stillness can make even a busy life feel balanced and peaceful.</p><p><br></p><p><img src=\"https://m.media-amazon.com/images/I/71znZqQSxLL._AC_UF894%2C1000_QL80_.jpg\" alt=\"https://m.media-amazon.com/images/I/71znZqQSxLL._AC_UF894%2C1000_QL80_.jpg\" width=\"457\" style=\"\"></p><p><br></p><p>Sometimes, a few calm minutes in the morning are enough to reset your mindset and improve your focus for the rest of the day.</p><p><br></p><p><img src=\"https://images.unsplash.com/photo-1602426973528-040a2abb486c?fm=jpg&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1vdW50YWluJTIwc3VucmlzZXxlbnwwfHwwfHx8MA%3D%3D&amp;ixlib=rb-4.1.0&amp;q=60&amp;w=3000\" alt=\"https://images.unsplash.com/photo-1602426973528-040a2abb486c?fm=jpg&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1vdW50YWluJTIwc3VucmlzZXxlbnwwfHwwfHx8MA%3D%3D&amp;ixlib=rb-4.1.0&amp;q=60&amp;w=3000\" width=\"402\" style=\"\"></p><p><br></p><p>Sometimes, a few calm minutes in the morning are enough to reset your mindset and improve your focus for the rest of the day.</p><p><br></p><p><img src=\"https://images.openai.com/thumbnails/url/2lvdKnicu5mVUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw50Tg1O9fHwNC328XFJ9_bz9imuqAjzS3dJCnIvLrTMMKvU9cp08zFzS63INEyMKM2vVCsGAHuZJow\" alt=\"https://cottagelife.com/wp-content/uploads/2019/12/3.-ddf381211a06-20190826_063956.jpg\" width=\"169\" style=\"\"></p><p>4</p><p>Sometimes, a few calm minutes in the morning are enough to reset your mindset and improve your focus for the rest of the day.</p>', 'leave_request', 1, 99, 2, 6, 'medium', '2026-04-07', 14, NULL, '2026-01-18 21:07:11', '2026-01-18 21:07:11'),
+(80, 'A leave request for this project', '<p>Waking up early gives you a quiet moment to breathe, reflect, and set the tone for the day. The soft light, cool air, and stillness can make even a busy life feel balanced and peaceful.</p><p><br></p><p><img src=\"https://m.media-amazon.com/images/I/71znZqQSxLL._AC_UF894%2C1000_QL80_.jpg\" alt=\"https://m.media-amazon.com/images/I/71znZqQSxLL._AC_UF894%2C1000_QL80_.jpg\" width=\"457\" style=\"\"></p><p><br></p><p>Sometimes, a few calm minutes in the morning are enough to reset your mindset and improve your focus for the rest of the day.</p><p><br></p><p><img src=\"https://images.unsplash.com/photo-1602426973528-040a2abb486c?fm=jpg&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1vdW50YWluJTIwc3VucmlzZXxlbnwwfHwwfHx8MA%3D%3D&amp;ixlib=rb-4.1.0&amp;q=60&amp;w=3000\" alt=\"https://images.unsplash.com/photo-1602426973528-040a2abb486c?fm=jpg&amp;ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1vdW50YWluJTIwc3VucmlzZXxlbnwwfHwwfHx8MA%3D%3D&amp;ixlib=rb-4.1.0&amp;q=60&amp;w=3000\" width=\"402\" style=\"\"></p><p><br></p><p>Sometimes, a few calm minutes in the morning are enough to reset your mindset and improve your focus for the rest of the day.</p><p><br></p><p><img src=\"https://images.openai.com/thumbnails/url/2lvdKnicu5mVUVJSUGylr5-al1xUWVCSmqJbkpRnoJdeXJJYkpmsl5yfq5-Zm5ieWmxfaAuUsXL0S7F0Tw50Tg1O9fHwNC328XFJ9_bz9imuqAjzS3dJCnIvLrTMMKvU9cp08zFzS63INEyMKM2vVCsGAHuZJow\" alt=\"https://cottagelife.com/wp-content/uploads/2019/12/3.-ddf381211a06-20190826_063956.jpg\" width=\"169\" style=\"\"></p><p>4</p><p>Sometimes, a few calm minutes in the morning are enough to reset your mindset and improve your focus for the rest of the day.</p>', 'leave_request', 1, 99, 2, 6, 'medium', '2026-04-07', 25, NULL, '2026-01-18 21:08:22', '2026-01-18 21:08:22');
 
 -- --------------------------------------------------------
 
@@ -1115,7 +1141,9 @@ INSERT INTO `work_item_history` (`id`, `work_item_id`, `from_status_id`, `to_sta
 (86, 1, 1, 1, 1, 'Final test comment via API', '2026-01-18 19:58:32'),
 (87, 76, NULL, 6, 1, 'Work item created', '2026-01-18 19:58:32'),
 (88, 77, NULL, 11, 1, 'Work item created', '2026-01-18 19:58:33'),
-(89, 78, NULL, 16, 1, 'Work item created', '2026-01-18 19:58:33');
+(89, 78, NULL, 16, 1, 'Work item created', '2026-01-18 19:58:33'),
+(90, 79, NULL, 6, 1, 'Work item created', '2026-01-18 21:07:11'),
+(91, 80, NULL, 6, 1, 'Work item created', '2026-01-18 21:08:22');
 
 --
 -- Indexes for dumped tables
@@ -1298,7 +1326,7 @@ ALTER TABLE `attachments`
 -- AUTO_INCREMENT for table `audit_log`
 --
 ALTER TABLE `audit_log`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
 
 --
 -- AUTO_INCREMENT for table `comments`
@@ -1334,7 +1362,7 @@ ALTER TABLE `leave_types`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `projects`
@@ -1346,7 +1374,7 @@ ALTER TABLE `projects`
 -- AUTO_INCREMENT for table `project_members`
 --
 ALTER TABLE `project_members`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=216;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=221;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -1376,13 +1404,13 @@ ALTER TABLE `workflow_transitions`
 -- AUTO_INCREMENT for table `work_items`
 --
 ALTER TABLE `work_items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `work_item_history`
 --
 ALTER TABLE `work_item_history`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- Constraints for dumped tables

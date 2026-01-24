@@ -1468,6 +1468,11 @@
                         <i class="bi bi-calendar-event"></i> Leaves
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/timesheets') !== false ? 'active' : '' ?>" href="<?= $this->getBaseUrl() ?>/timesheets">
+                        <i class="bi bi-clock-history"></i> Timesheets
+                    </a>
+                </li>
             </ul>
 
             <div class="nav-section">Team</div>

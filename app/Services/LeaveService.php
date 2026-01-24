@@ -43,6 +43,13 @@ class LeaveService
                 WHERE lq.designation = ?";
         $quotas = $this->db->fetchAll($sql, [$designation]);
 
+        // If no quotas found for this designation, use default quotas
+        if (empty($quotas)) {
+            // Get all leave types with default quota of 15 days
+            $sql = "SELECT id as leave_type_id, 15 as annual_quota FROM leave_types";
+            $quotas = $this->db->fetchAll($sql);
+        }
+
         foreach ($quotas as $quota) {
             // Check if balance already exists
             $existing = $this->db->fetchOne(
@@ -114,23 +121,38 @@ class LeaveService
 
         $metadata = json_decode($workItem['metadata'], true);
         
+        // Calculate days if not in metadata (backward compatibility)
+        if (!isset($metadata['days'])) {
+            $start = new DateTime($metadata['start_date']);
+            $end = new DateTime($metadata['end_date']);
+            $metadata['days'] = $end->diff($start)->days + 1;
+        }
+        
         // Deduct from balance
         $year = date('Y', strtotime($metadata['start_date']));
-        $this->db->execute(
+        $result = $this->db->execute(
             "UPDATE leave_balances 
              SET used = used + ?, remaining = remaining - ?
              WHERE employee_id = ? AND leave_type_id = ? AND year = ?",
             [$metadata['days'], $metadata['days'], $workItem['created_by'], $metadata['leave_type_id'], $year]
         );
 
+        // Verify balance was updated
+        if ($result === 0) {
+            error_log("Warning: No leave balance found to deduct for employee {$workItem['created_by']}, leave type {$metadata['leave_type_id']}, year {$year}");
+        }
+
         // Audit log
-        $this->auditLog->log(
-            Session::get('user')['id'],
-            'approve_leave',
-            'work_item',
-            $workItemId,
-            $metadata
-        );
+        $user = Session::get('user') ?? $_SESSION['api_user'] ?? null;
+        if ($user && isset($user['id'])) {
+            $this->auditLog->log(
+                $user['id'],
+                'approve_leave',
+                'work_item',
+                $workItemId,
+                array_merge($metadata, ['days_deducted' => $metadata['days']])
+            );
+        }
 
         return true;
     }

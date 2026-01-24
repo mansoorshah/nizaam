@@ -50,22 +50,16 @@ class LeaveApiController extends ApiController
         try {
             $employee = $this->getCurrentEmployee();
             
-            $metadata = [
-                'leave_type_id' => $data['leave_type_id'],
-                'start_date' => $data['start_date'],
-                'end_date' => $data['end_date']
-            ];
-
-            $workItemId = $this->workflowService->createWorkItem(
-                'leave_request',
-                'Leave Request: ' . $data['start_date'] . ' to ' . $data['end_date'],
-                $data['reason'],
+            // Use LeaveService to handle leave request creation with proper validation
+            require_once __DIR__ . '/../../Services/LeaveService.php';
+            $leaveService = new LeaveService();
+            
+            $workItemId = $leaveService->submitLeaveRequest(
                 $employee['id'],
-                $employee['manager_id'] ?? null,
-                'medium',
+                $data['leave_type_id'],
+                $data['start_date'],
                 $data['end_date'],
-                null,
-                $metadata
+                $data['reason']
             );
 
             $leave = $this->workItemModel->getWithDetails($workItemId);
